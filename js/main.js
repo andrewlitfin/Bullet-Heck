@@ -8,7 +8,7 @@ bulletHeck.main = {
     
     //preload function for calling via phaser
     preload : function() {
-        game.load.image('sky', 'assets/phaser/sky.png');
+        game.load.image('space', 'assets/background.jpg');
         
         //preload the player
         player.main.preload();
@@ -17,7 +17,7 @@ bulletHeck.main = {
     //create function for calling via phaser
     create : function() {
         //  A simple background for our game
-        game.add.sprite(0, 0, 'sky');
+        game.add.sprite(0, 0, 'space');
         
         //create the player
         player.main.create();

@@ -23,7 +23,7 @@ player.main = {
     preload : function(){
         //load images
         game.load.image('player', 'assets/player/ship.png');
-        game.load.image('bullet', 'assets/player/spr_bullet_strip.png')
+        game.load.image('bullet', 'assets/player/bullet.png')
         
         //establish keys
         keyUp = game.input.keyboard.addKey(Phaser.Keyboard.UP);
@@ -35,7 +35,6 @@ player.main = {
     
     create : function(){
         playerObj = game.add.sprite(game.width/2, game.height/2, 'player');
-        //playerObj.image.anchor.setTo(game.width/2, game.height/2);
         playerObj.scale.set(0.2,0.2);       
     },
         
@@ -75,6 +74,6 @@ player.main = {
     },
     
     fireBullet : function(){
-        this.bullets.push(game.add.sprite(playerObj.x, playerObj.y, 'bullet'));
+        this.bullets.push(game.add.sprite(playerObj.x + playerObj.width/4, playerObj.y, 'bullet'));
     }
 }
