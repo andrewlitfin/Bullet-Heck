@@ -1,3 +1,5 @@
+"use strict";
+
 // if app exists use the existing copy
 // else create a new empty object literal
 var bulletHeck = bulletHeck || {};
@@ -27,5 +29,5 @@ bulletHeck.main = {
     update : function() {
         //update the player
         player.main.update();
-    },
-}
+    }
+};
