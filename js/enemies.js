@@ -23,7 +23,11 @@ bulletHeck.enemies = {
     },
     
     create : function () {
-
+        this.enemyObjs.push({
+            enemyType: this.enemyType.TYPE1,
+            sprite: game.add.sprite(0, 50, 'enemy1')
+        });
+        this.enemyObjs[this.enemyObjs.length - 1].sprite.x -= this.enemyObjs[this.enemyObjs.length - 1].width;
     },
     
     update : function () {
@@ -33,23 +37,24 @@ bulletHeck.enemies = {
         // (index arg is going to be stored in toDelete)
         // (second arg is # of enemies to delete)
         var toDelete = [null];
-        for (var i = 0, len = enemyObjs.length; i < len; i++) {
+        for (var i = 0, len = this.enemyObjs.length; i < len; i++) {
             var eo = enemyObjs[i];
             switch (eo.enemyType) {
-                case enemyType.TYPE1:
+                case this.enemyType.TYPE1:
+                    eo.sprite.x += 1;
                     break;
-                case enemyType.TYPE2:
+                case this.enemyType.TYPE2:
                     break;
-                case enemyType.TYPE3:
+                case this.enemyType.TYPE3:
                     break;
-                case enemyType.BOSS:
+                case this.enemyType.BOSS:
                     break;
                 default:
                     break;
             }
         }
         for (var i = 0, len = toDelete.length; i < len; i++) {
-            enemyObjs.splice(toDelete[i], 1);
+            this.enemyObjs.splice(toDelete[i], 1);
         }
     }
 };
