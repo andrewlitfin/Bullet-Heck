@@ -34,8 +34,11 @@ player.main = {
     },
     
     create : function(){
-        playerObj = game.add.sprite(game.width/2, game.height/2, 'player');
-        playerObj.scale.set(0.2,0.2);       
+        //create the player Object and center it on the screen
+        playerObj = game.add.sprite(game.width/2, game.height, 'player');
+        playerObj.scale.set(0.2,0.2);
+        playerObj.x -= playerObj.width/2;
+        playerObj.y -= playerObj.height + 20;
     },
         
     update : function(){
@@ -85,6 +88,7 @@ player.main = {
     },
     
     fireBullet : function(){
-        this.bullets.push(game.add.sprite(playerObj.x + playerObj.width/4, playerObj.y, 'bullet'));
-    }
+        this.bullets.push(game.add.sprite(playerObj.x + playerObj.width/2, playerObj.y, 'bullet'));
+        this.bullets[this.bullets.length-1].x -= this.bullets[this.bullets.length-1].width/2;
+    },
 }
