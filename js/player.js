@@ -1,3 +1,4 @@
+"use strict";
 //File for handling all methods directly related to the player
 
 // if app exists use the existing copy
@@ -23,7 +24,7 @@ player.main = {
     preload : function(){
         //load images
         game.load.image('player', 'assets/player/ship.png');
-        game.load.image('bullet', 'assets/player/bullet.png')
+        game.load.image('bullet', 'assets/player/bullet.png');
         
         //establish keys
         keyUp = game.input.keyboard.addKey(Phaser.Keyboard.UP);
