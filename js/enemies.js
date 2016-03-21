@@ -2,11 +2,11 @@
 "use strict";
 // if app exists use the existing copy
 // else create a new empty object literal
-var bulletHeck = bulletHeck || {};
+var enemies = enemies || {};
 
-bulletHeck.enemies = {
+enemies.main = {
     // master list of active enemies
-    enemyObjs: [null],
+    enemyObjs: [],
     // enemy type "enum"
     enemyType: Object.freeze({
         TYPE1: 0,
@@ -25,9 +25,8 @@ bulletHeck.enemies = {
     create : function () {
         this.enemyObjs.push({
             enemyType: this.enemyType.TYPE1,
-            sprite: game.add.sprite(0, 50, 'enemy1')
+            sprite: game.add.sprite(game.width/2, game.height/2, 'enemy1')
         });
-        this.enemyObjs[this.enemyObjs.length - 1].sprite.x -= this.enemyObjs[this.enemyObjs.length - 1].width;
     },
     
     update : function () {
@@ -36,12 +35,12 @@ bulletHeck.enemies = {
         // and removed with enemyObjs.splice([index], 1)
         // (index arg is going to be stored in toDelete)
         // (second arg is # of enemies to delete)
-        var toDelete = [null];
+        var toDelete = [];
+        console.log(toDelete.length);
         for (var i = 0, len = this.enemyObjs.length; i < len; i++) {
-            var eo = enemyObjs[i];
+            var eo = this.enemyObjs[i];
             switch (eo.enemyType) {
                 case this.enemyType.TYPE1:
-                    eo.sprite.x += 1;
                     break;
                 case this.enemyType.TYPE2:
                     break;

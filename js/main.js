@@ -4,6 +4,7 @@
 // else create a new empty object literal
 var bulletHeck = bulletHeck || {};
 var player = player || {};
+var enemies = enemies || {};
 
 bulletHeck.main = {
     //variables go here
@@ -14,6 +15,9 @@ bulletHeck.main = {
         
         //preload the player
         player.main.preload();
+        
+        // preload enemies
+        enemies.main.preload();
     },
     
     //create function for calling via phaser
@@ -23,11 +27,17 @@ bulletHeck.main = {
         
         //create the player
         player.main.create();
+        
+        // create enemies
+        enemies.main.create();
     },
     
     //update function for calling via phaser
     update : function() {
         //update the player
         player.main.update();
+        
+        // update enemies
+        enemies.main.update();
     }
 };
