@@ -34,7 +34,11 @@ UI.main = {
         
         game.load.image('space', 'assets/background.jpg');
         
-        game.load.spritesheet('button', 'assets/UI/buttons.png', 96, 32);
+        game.load.spritesheet('playButton', 'assets/UI/playButton.png', 96, 32);
+        game.load.spritesheet('nextLevelButton', 'assets/UI/nextLevelButton.png', 96, 32);
+        game.load.spritesheet('mainMenuButton', 'assets/UI/mainMenuButton.png', 96, 32);
+        game.load.spritesheet('replayLevelButton', 'assets/UI/replayLevelButton.png', 96, 32);
+        game.load.spritesheet('unpauseButton', 'assets/UI/unpauseButton.png', 96, 32);
         
         //establish keys
         this.keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
@@ -48,7 +52,7 @@ UI.main = {
         
         //establish MAIN_MENU UI
         if(this.gameState == this.GAME_STATE.MAIN_MENU){
-            this.MAIN_MENU_playButton = game.add.button(game.world.centerX - 48, game.world.centerY, 'button', this.playGame, this, 2,1,0);
+            this.MAIN_MENU_playButton = game.add.button(game.world.centerX - 48, game.world.centerY, 'playButton', this.playGame, this, 2,1,0);
         }
         
         //establish IN_LEVEL UI
@@ -57,18 +61,18 @@ UI.main = {
         
         //establish PAUSE UI
         if(this.gameState == this.GAME_STATE.PAUSE){
-            this.PAUSE_unpauseButton = game.add.button(game.world.centerX - 48, game.world.centerY - 32, 'button', this.unpause, this, 2,1,0);
-            this.PAUSE_toMainMenuButton = game.add.button(game.world.centerX - 48, game.world.centerY + 32, 'button', this.toMainMenu, this, 2,1,0);
+            this.PAUSE_unpauseButton = game.add.button(game.world.centerX - 48, game.world.centerY - 32, 'unpauseButton', this.unpause, this, 2,1,0);
+            this.PAUSE_toMainMenuButton = game.add.button(game.world.centerX - 48, game.world.centerY + 32, 'mainMenuButton', this.toMainMenu, this, 2,1,0);
         }
         
         //establish GAME_OVER UI
         if(this.gameState == this.GAME_STATE.GAME_OVER){
-            this.GAME_OVER_replayPrevLevelButton = game.add.button(game.world.centerX - 48, game.world.centerY, 'button', this.replayPrevLevel, this, 2,1,0);
+            this.GAME_OVER_replayPrevLevelButton = game.add.button(game.world.centerX - 48, game.world.centerY, 'replayLevelButton', this.replayPrevLevel, this, 2,1,0);
         }
         
         //establish LEVEL_COMPLETE UI
         if(this.gameState == this.GAME_STATE.LEVEL_COMPLETE){
-            this.LEVEL_COMPLETE_nextLevelButton = game.add.button(game.world.centerX - 48, game.world.centerY, 'button', this.nextLevel, this, 2,1,0);
+            this.LEVEL_COMPLETE_nextLevelButton = game.add.button(game.world.centerX - 48, game.world.centerY, 'nextLevelButton', this.nextLevel, this, 2,1,0);
         }
         
         //Add a listener for the pause button (P)
