@@ -23,10 +23,9 @@ enemies.main = {
     },
     
     create : function () {
-        this.enemyObjs.push({
-            enemyType: this.enemyType.TYPE1,
-            sprite: game.add.sprite(game.width/2, game.height/2, 'enemy1')
-        });
+        this.addEnemy(this.enemyType.TYPE1);
+        this.addEnemy(this.enemyType.TYPE2);
+        this.addEnemy(this.enemyType.TYPE3);
     },
     
     update : function () {
@@ -36,15 +35,20 @@ enemies.main = {
         // (index arg is going to be stored in toDelete)
         // (second arg is # of enemies to delete)
         var toDelete = [];
-        console.log(toDelete.length);
         for (var i = 0, len = this.enemyObjs.length; i < len; i++) {
             var eo = this.enemyObjs[i];
             switch (eo.enemyType) {
                 case this.enemyType.TYPE1:
+                    eo.sprite.x += 2;
+                    if (eo.sprite.x > game.width) toDelete.push(i);
                     break;
                 case this.enemyType.TYPE2:
+                    eo.sprite.x -= 2;
+                    if (eo.sprite.x < 0 - eo.sprite.width) toDelete.push(i);
                     break;
                 case this.enemyType.TYPE3:
+                    eo.sprite.y += 2;
+                    if (eo.sprite.y > game.height) toDelete.push(i);
                     break;
                 case this.enemyType.BOSS:
                     break;
@@ -53,7 +57,26 @@ enemies.main = {
             }
         }
         for (var i = 0, len = toDelete.length; i < len; i++) {
+            this.enemyObjs[toDelete[i]].sprite.destroy();
             this.enemyObjs.splice(toDelete[i], 1);
         }
+    },
+    
+    addEnemy : function (enemytype) {
+        var eo = {
+            enemyType: enemytype,
+            sprite:
+                (enemytype == this.enemyType.TYPE1) ? game.add.sprite(0, 40, 'enemy1') 
+                : (enemytype == this.enemyType.TYPE2) ? game.add.sprite(game.width, 150, 'enemy2') 
+                : (enemytype == this.enemyType.TYPE3) ? game.add.sprite(game.width/2, 0, 'enemy3') 
+                : null
+        };
+        eo.sprite.scale.set(0.25, 0.25);
+        if (eo.enemyType == this.enemyType.TYPE1) eo.sprite.x -= eo.sprite.width;
+        if (eo.enemyType == this.enemyType.TYPE3) {
+            eo.sprite.x -= eo.sprite.width/2;
+            eo.sprite.y -= eo.sprite.height;
+        }
+        this.enemyObjs.push(eo);
     }
 };
