@@ -36,7 +36,6 @@ bulletHeck.main = {
         UI.main.update();
         
         if (UI.main.gameState == UI.main.GAME_STATE.IN_LEVEL){
-            console.log("IN LEVEL UPDATE");
             //update the player
             player.main.update();
 

@@ -18,6 +18,9 @@ UI.main = {
     
     gameState: undefined,
     
+    //keyboard inputs
+    keyP: undefined,
+    
     GAME_STATE: Object.freeze({ //fake enumeration for game state
         MAIN_MENU: 0,
         IN_LEVEL: 1,
@@ -32,11 +35,16 @@ UI.main = {
         game.load.image('space', 'assets/background.jpg');
         
         game.load.spritesheet('button', 'assets/UI/buttons.png', 96, 32);
+        
+        //establish keys
+        this.keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
     },
     
     create: function(){
-        //  A simple background for our game
-        game.add.sprite(0, 0, 'space');
+        if(this.gameState != this.GAME_STATE.PAUSE && this.gameState != this.GAME_STATE.IN_LEVEL){
+            //  A simple background for our game
+            game.add.sprite(0, 0, 'space');
+        }
         
         //establish MAIN_MENU UI
         if(this.gameState == this.GAME_STATE.MAIN_MENU){
@@ -45,7 +53,6 @@ UI.main = {
         
         //establish IN_LEVEL UI
         if(this.gameState == this.GAME_STATE.IN_LEVEL){
-            this.IN_LEVEL_pauseButton = game.add.button(game.world.centerX - 48, 0, 'button', this.pause, this, 2,1,0);
         }
         
         //establish PAUSE UI
@@ -63,14 +70,16 @@ UI.main = {
         if(this.gameState == this.GAME_STATE.LEVEL_COMPLETE){
             this.LEVEL_COMPLETE_nextLevelButton = game.add.button(game.world.centerX - 48, game.world.centerY, 'button', this.nextLevel, this, 2,1,0);
         }
+        
+        //Add a listener for the pause button (P)
+        this.keyP.onDown.add(this.pauseToggle, this, 0);
     },
     
     update: function(){
-        console.log(this.gameState);
     },
-        
+    
+    //Begin playing the game from the main menu
     playGame: function() {
-        //Move the game state to the IN_LEVEL game state when the play button is clicked
         this.gameState = this.GAME_STATE.IN_LEVEL;
         this.MAIN_MENU_playButton.destroy();
         //rebuild the UI for the current gamestate
@@ -81,25 +90,40 @@ UI.main = {
         enemies.main.create();
     },
     
+    //Toggle the game state for purposes of pausing and unpausing
+    pauseToggle: function() {
+        //if the game is paused
+        if (this.gameState == this.GAME_STATE.PAUSE){
+            //unpause it
+            this.unpause();
+            return;
+        }
+        //if the game is not paused
+        if(this.gameState == this.GAME_STATE.IN_LEVEL){
+            //pause it
+            this.pause();
+            return;
+        }
+        
+    },
+    
+    //Pause the game from in a level
     pause: function(){
         this.gameState = this.GAME_STATE.PAUSE;
-        this.IN_LEVEL_pauseButton.destroy();
         //rebuild the UI for the current gamestate
         this.create();
     },
     
+    //Unpause the game from the pause menu
     unpause: function(){
         this.gameState = this.GAME_STATE.IN_LEVEL;
         this.PAUSE_unpauseButton.destroy();
         this.PAUSE_toMainMenuButton.destroy();
         //rebuild the UI for the current gamestate
         this.create();
-        //create the player objects
-        player.main.create();
-        //create the enemy objects
-        enemies.main.create();
     },
     
+    //Return to the main menu from the pause menu
     toMainMenu: function(){
         this.gameState = this.GAME_STATE.MAIN_MENU;
         this.PAUSE_unpauseButton.destroy();
@@ -108,6 +132,7 @@ UI.main = {
         this.create();
     },
     
+    //Restart the previous level when the replayPrevLevel button is pressed
     replayPrevLevel: function(){
         this.gameState = this.GAME_STATE.IN_LEVEL;
         this.GAME_OVER_replayPrevLevelButton.destroy();
@@ -115,6 +140,7 @@ UI.main = {
         this.create();
     },
     
+    //Move to the next level once you have completed a level
     nextLevel: function(){
         this.gameState = this.GAME_STATE.IN_LEVEL;
         this.LEVEL_COMPLETE_nextLevelButton.destroy();
