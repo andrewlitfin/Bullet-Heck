@@ -66,9 +66,20 @@ player.main = {
         if(keySpace.isDown){
             this.fireBullet();
         }
+        
+        //update the bullets
         for (var i = 0; i < this.bullets.length; i++){
+            //move the bullets every frame
             if (this.bullets[i] != null){
                 this.bullets[i].y -= this.bulletSpeed;
+            }
+            //destroy the bullets when they go off screen
+            if (this.bullets[i] != null){
+                if (this.bullets[i].y < 0){
+                    this.bullets[i].destroy();
+                    this.bullets.splice(i, 1);
+                    i--;
+                }
             }
         }
     },

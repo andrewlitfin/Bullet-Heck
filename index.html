@@ -16,30 +16,27 @@
             margin: 0 auto;
         }
     </style>
+    <script type="text/javascript">
+        //create a game object using Phaser
+        var game = new Phaser.Game(600, 700, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+        //Phaser's core preload function
+        function preload() {
+            bulletHeck.main.preload();
+        }
+
+        //Phaser's core create function
+        function create() {
+            bulletHeck.main.create();
+        }
+
+        //Phaser's core update function
+        function update() {
+            bulletHeck.main.update();
+        }
+    </script>
 </head>
 <body>
-
-<script type="text/javascript">
-
-//create a game object using Phaser
-var game = new Phaser.Game(600, 700, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
-//Phaser's core preload function
-function preload() {
-    bulletHeck.main.preload();
-}
-
-//Phaser's core create function
-function create() {
-    bulletHeck.main.create();
-}
-
-//Phaser's core update function
-function update() {
-    bulletHeck.main.update();
-}
-
-</script>
 
 </body>
 </html>
