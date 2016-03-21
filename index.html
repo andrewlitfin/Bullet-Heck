@@ -15,10 +15,14 @@
         canvas {
             margin: 0 auto;
         }
+        h1{
+            text-align: center;
+            margin: 0 auto;
+        }
     </style>
     <script type="text/javascript">
         //create a game object using Phaser
-        var game = new Phaser.Game(600, 700, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+        var game = new Phaser.Game(600, 700, Phaser.AUTO, 'bulletHeckCanvas', { preload: preload, create: create, update: update });
 
         //Phaser's core preload function
         function preload() {
@@ -37,6 +41,7 @@
     </script>
 </head>
 <body>
-
+    <h1>Bullet Heck!</h1>
+    <div id="bulletHeckCanvas"></div>
 </body>
 </html>

@@ -75,7 +75,7 @@ player.main = {
             }
             //destroy the bullets when they go off screen
             if (this.bullets[i] != null){
-                if (this.bullets[i].y < 0){
+                if (this.bullets[i].y < -10){
                     this.bullets[i].destroy();
                     this.bullets.splice(i, 1);
                     i--;
