@@ -7,7 +7,7 @@ var player = player || {};
 
 player.main = {
     //player and related attributes
-    playerObj : null,
+    playerObj : undefined,
     speed: 5,
     
     //bullets
@@ -15,59 +15,59 @@ player.main = {
     bulletSpeed: 20,
     
     //keyboard inputs
-    keyUp: null,
-    keyDown: null,
-    keyLeft: null,
-    keyRight: null,
-    keySpace: null,
+    keyUp: undefined,
+    keyDown: undefined,
+    keyLeft: undefined,
+    keyRight: undefined,
+    keySpace: undefined,
 
     preload : function(){
         //load images
         game.load.image('player', 'assets/player/ship.png');
-        game.load.image('bullet', 'assets/player/bullet.png');
+        game.load.image('bullet', 'assets/player/bullet.png'); 
         
         //establish keys
-        keyUp = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-        keyDown = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-        keyLeft = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-        keyRight = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-        keySpace = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.keyUp = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+        this.keyDown = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        this.keyLeft = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        this.keyRight = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.keySpace = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     },
     
     create : function(){
         //create the player Object and center it on the screen
-        playerObj = game.add.sprite(game.width/2, game.height, 'player');
-        playerObj.scale.set(0.2,0.2);
-        playerObj.x -= playerObj.width/2;
-        playerObj.y -= playerObj.height + 20;
+        this.playerObj = game.add.sprite(game.width/2, game.height, 'player');
+        this.playerObj.scale.set(0.2,0.2);
+        this.playerObj.x -= this.playerObj.width/2;
+        this.playerObj.y -= this.playerObj.height + 20;
     },
         
     update : function(){
-        if (keyLeft.isDown){
+        if (this.keyLeft.isDown){
             //keep the player from going off the screen to the left
-            if(playerObj.x > 0){
-                playerObj.x -= this.speed;
+            if(this.playerObj.x > 0){
+                this.playerObj.x -= this.speed;
             }
         }
-        if (keyRight.isDown){
+        if (this.keyRight.isDown){
             //keep the player from going off the screeen to the right
-            if (playerObj.x < game.width - playerObj.width){
-                playerObj.x += this.speed;
+            if (this.playerObj.x < game.width - this.playerObj.width){
+                this.playerObj.x += this.speed;
             }
         }
-        if (keyUp.isDown){
+        if (this.keyUp.isDown){
             //keep the player from going off the top of the screen
-            if (playerObj.y > 0){
-                playerObj.y -= this.speed; 
+            if (this.playerObj.y > 0){
+                this.playerObj.y -= this.speed; 
             }
         }
-        if(keyDown.isDown){
+        if(this.keyDown.isDown){
             //keep the player from going off the bottom of the screen
-            if(playerObj.y < game.height - playerObj.height){
-                playerObj.y += this.speed;
+            if(this.playerObj.y < game.height - this.playerObj.height){
+                this.playerObj.y += this.speed;
             }
         }
-        if(keySpace.isDown){
+        if(this.keySpace.isDown){
             this.fireBullet();
         }
         
@@ -89,7 +89,7 @@ player.main = {
     },
     
     fireBullet : function(){
-        this.bullets.push(game.add.sprite(playerObj.x + playerObj.width/2, playerObj.y, 'bullet'));
+        this.bullets.push(game.add.sprite(this.playerObj.x + this.playerObj.width/2, this.playerObj.y, 'bullet'));
         this.bullets[this.bullets.length-1].x -= this.bullets[this.bullets.length-1].width/2;
     },
 }
