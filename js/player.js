@@ -11,7 +11,7 @@ player.main = {
     speed: 5,
     
     //bullets
-    bullets: [null],
+    bullets: [],
     bulletSpeed: 20,
     
     //keyboard inputs

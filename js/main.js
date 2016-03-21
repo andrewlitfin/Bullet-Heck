@@ -5,14 +5,16 @@
 var bulletHeck = bulletHeck || {};
 var player = player || {};
 var enemies = enemies || {};
+var UI = UI || {};
 
 bulletHeck.main = {
     //variables go here
     
     //preload function for calling via phaser
-    preload : function() {
-        game.load.image('space', 'assets/background.jpg');
-        
+    preload : function() {     
+        //preload UI
+        UI.main.preload();
+
         //preload the player
         player.main.preload();
         
@@ -21,23 +23,25 @@ bulletHeck.main = {
     },
     
     //create function for calling via phaser
-    create : function() {
-        //  A simple background for our game
-        game.add.sprite(0, 0, 'space');
+    create : function() {        
+        //create UI
+        UI.main.create();
         
-        //create the player
-        player.main.create();
-        
-        // create enemies
-        enemies.main.create();
+        //DO NOT CREATE ANYTHING ELSE HERE. ALL CREATION WILL BE HANDLED THROUGH UI BUTTON PRESSES.
     },
     
     //update function for calling via phaser
     update : function() {
-        //update the player
-        player.main.update();
+        //update UI
+        UI.main.update();
         
-        // update enemies
-        enemies.main.update();
+        if (UI.main.gameState == UI.main.GAME_STATE.IN_LEVEL){
+            console.log("IN LEVEL UPDATE");
+            //update the player
+            player.main.update();
+
+            // update enemies
+            enemies.main.update();
+        }
     }
 };
