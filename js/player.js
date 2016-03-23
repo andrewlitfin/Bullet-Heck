@@ -9,6 +9,8 @@ player.main = {
     //player and related attributes
     playerObj : undefined,
     speed: 5,
+    STARTING_HEALTH: 1,
+    health: undefined,
     
     //bullets
     bullets: [],
@@ -40,9 +42,16 @@ player.main = {
         this.playerObj.scale.set(0.2,0.2);
         this.playerObj.x -= this.playerObj.width/2;
         this.playerObj.y -= this.playerObj.height + 20;
+        this.health = this.STARTING_HEALTH;
     },
         
     update : function(){
+        //if the player is dead
+        if (this.health <= 0){
+            console.log("You are dead");
+            return;
+        }
+        
         if (this.keyLeft.isDown){
             //keep the player from going off the screen to the left
             if(this.playerObj.x > 0){

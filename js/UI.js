@@ -142,6 +142,9 @@ UI.main = {
         this.GAME_OVER_replayPrevLevelButton.destroy();
         //rebuild the UI for the current gamestate
         this.create();
+        //rebuild the player and the enemies
+        player.main.create();
+        enemies.main.create();
     },
     
     //Move to the next level once you have completed a level

@@ -78,7 +78,7 @@ enemies.main = {
             case this.enemyType.TYPE3: //generate an enemy of type 3
                 eo = {
                     sprite: game.add.sprite(game.width/2, 0, 'enemy3'),
-                    health: 180,
+                    health: 60,
                     enemyType: _enemyType,
                     update: function(){
                         eo.sprite.y += 2;
