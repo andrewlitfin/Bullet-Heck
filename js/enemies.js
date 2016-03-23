@@ -46,10 +46,11 @@ enemies.main = {
         }
     },
     
+    //a function which adds an enemy based on the enemy type we pass it
     addEnemy : function (_enemyType) {
-        var eo;
+        var eo; //a variable to track the enemy obj we are creating
         switch(_enemyType){
-            case this.enemyType.TYPE1:
+            case this.enemyType.TYPE1: //generate an enemy of type 1
                 eo = {
                     sprite: game.add.sprite(0, 40, 'enemy1'),
                     health: 60,
@@ -58,8 +59,11 @@ enemies.main = {
                         eo.sprite.x += 2;
                     }
                 }
+                //rescale the sprite
+                eo.sprite.scale.set(0.25, 0.25);
+                eo.sprite.x -= eo.sprite.width + 1;
                 break;
-            case this.enemyType.TYPE2:
+            case this.enemyType.TYPE2: //generate an enemy of type 2
                 eo = {
                     sprite: game.add.sprite(game.width, 150, 'enemy2'),
                     health: 120,
@@ -68,8 +72,10 @@ enemies.main = {
                         eo.sprite.x -= 2;
                     }
                 }
+                //rescale the sprite
+                eo.sprite.scale.set(0.25, 0.25);
                 break;
-            case this.enemyType.TYPE3:
+            case this.enemyType.TYPE3: //generate an enemy of type 3
                 eo = {
                     sprite: game.add.sprite(game.width/2, 0, 'enemy3'),
                     health: 180,
@@ -78,24 +84,29 @@ enemies.main = {
                         eo.sprite.y += 2;
                     }
                 }
+                //rescale the sprite
+                eo.sprite.scale.set(0.25, 0.25);
+                eo.sprite.x -= eo.sprite.width/2;
+                eo.sprite.y -= eo.sprite.height + 1;
                 break;
-            case this.enemyType.BOSS:
+            case this.enemyType.BOSS: //generate an enemy of type 'BOSS'
             default:
                 break;
         }
+        //method to check if the enemy has either run out of health or left the screen
         eo.isAlive = function(){
+            //if the enemy is out of health
             if (this.health <= 0) return false;
-            if (this.sprite.x < -this.sprite.width || this.sprite.x > game.width ||
-                this.sprite.y < -this.sprite.height || this.sprite.y > game.height)
+            //if the enemy is off screen
+            if (this.sprite.x < 0-this.sprite.width*2||//left
+                this.sprite.x > 0+game.width+this.sprite.width||//right
+                this.sprite.y < 0-this.sprite.height*2||//top
+                this.sprite.y > 0+game.height+this.sprite.height)//bottom
                 return false;
+            //otherwise
             return true;
         }
-        eo.sprite.scale.set(0.25, 0.25);
-        if (eo.enemyType == this.enemyType.TYPE1) eo.sprite.x -= eo.sprite.width;
-        if (eo.enemyType == this.enemyType.TYPE3) {
-            eo.sprite.x -= eo.sprite.width/2;
-            eo.sprite.y -= eo.sprite.height;
-        }
+        //push the generated enemy onto the array of enemies
         this.enemyObjs.push(eo);
     }
 };
