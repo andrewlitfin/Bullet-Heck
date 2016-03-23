@@ -35,42 +35,61 @@ enemies.main = {
         // (index arg is going to be stored in toDelete)
         // (second arg is # of enemies to delete)
         var toDelete = [];
-        for (var i = 0, len = this.enemyObjs.length; i < len; i++) {
+        for (var i = 0; i < this.enemyObjs.length; i++) {
             var eo = this.enemyObjs[i];
-            switch (eo.enemyType) {
-                case this.enemyType.TYPE1:
-                    eo.sprite.x += 2;
-                    if (eo.sprite.x > game.width) toDelete.push(i);
-                    break;
-                case this.enemyType.TYPE2:
-                    eo.sprite.x -= 2;
-                    if (eo.sprite.x < 0 - eo.sprite.width) toDelete.push(i);
-                    break;
-                case this.enemyType.TYPE3:
-                    eo.sprite.y += 2;
-                    if (eo.sprite.y > game.height) toDelete.push(i);
-                    break;
-                case this.enemyType.BOSS:
-                    break;
-                default:
-                    break;
+            eo.update();
+            if (!eo.isAlive()){
+                this.enemyObjs[i].sprite.destroy();
+                this.enemyObjs.splice(i, 1);
+                i--;
             }
-        }
-        for (var i = 0, len = toDelete.length; i < len; i++) {
-            this.enemyObjs[toDelete[i]].sprite.destroy();
-            this.enemyObjs.splice(toDelete[i], 1);
         }
     },
     
-    addEnemy : function (enemytype) {
-        var eo = {
-            enemyType: enemytype,
-            sprite:
-                (enemytype == this.enemyType.TYPE1) ? game.add.sprite(0, 40, 'enemy1') 
-                : (enemytype == this.enemyType.TYPE2) ? game.add.sprite(game.width, 150, 'enemy2') 
-                : (enemytype == this.enemyType.TYPE3) ? game.add.sprite(game.width/2, 0, 'enemy3') 
-                : null
-        };
+    addEnemy : function (_enemyType) {
+        var eo;
+        switch(_enemyType){
+            case this.enemyType.TYPE1:
+                eo = {
+                    sprite: game.add.sprite(0, 40, 'enemy1'),
+                    health: 60,
+                    enemyType: _enemyType,
+                    update: function(){
+                        eo.sprite.x += 2;
+                    }
+                }
+                break;
+            case this.enemyType.TYPE2:
+                eo = {
+                    sprite: game.add.sprite(game.width, 150, 'enemy2'),
+                    health: 120,
+                    enemyType: _enemyType,
+                    update: function(){
+                        eo.sprite.x -= 2;
+                    }
+                }
+                break;
+            case this.enemyType.TYPE3:
+                eo = {
+                    sprite: game.add.sprite(game.width/2, 0, 'enemy3'),
+                    health: 180,
+                    enemyType: _enemyType,
+                    update: function(){
+                        eo.sprite.y += 2;
+                    }
+                }
+                break;
+            case this.enemyType.BOSS:
+            default:
+                break;
+        }
+        eo.isAlive = function(){
+            if (this.health <= 0) return false;
+            if (this.sprite.x < -this.sprite.width || this.sprite.x > game.width ||
+                this.sprite.y < -this.sprite.height || this.sprite.y > game.height)
+                return false;
+            return true;
+        }
         eo.sprite.scale.set(0.25, 0.25);
         if (eo.enemyType == this.enemyType.TYPE1) eo.sprite.x -= eo.sprite.width;
         if (eo.enemyType == this.enemyType.TYPE3) {
