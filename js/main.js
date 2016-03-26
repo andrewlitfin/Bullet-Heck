@@ -46,11 +46,10 @@ bulletHeck.main = {
                 for (var j = 0; j < enemies.main.enemyObjs.length; j++){
                     var bulletSprite = player.main.bullets[i];
                     var enemySprite = enemies.main.enemyObjs[j].sprite;
-                    if (bulletSprite.x < 
-                        enemySprite.x + enemySprite.width &&
-                       bulletSprite.x + bulletSprite.width > enemySprite.x &&
-                       bulletSprite.y < enemySprite.y + enemySprite.height &&
-                       bulletSprite.y + bulletSprite.height > enemySprite.y){
+                    if (bulletSprite.x < enemySprite.x-15 + enemySprite.width &&
+                       bulletSprite.x + bulletSprite.width > enemySprite.x+15 &&
+                       bulletSprite.y < enemySprite.y-15 + enemySprite.height &&
+                       bulletSprite.y + bulletSprite.height > enemySprite.y+15){
                         //HANDLE COLLISION HERE
                         enemies.main.enemyObjs[j].health--;
                         player.main.bullets[i].destroy();
