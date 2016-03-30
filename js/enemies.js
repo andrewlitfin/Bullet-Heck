@@ -2,9 +2,12 @@
 "use strict";
 // if app exists use the existing copy
 // else create a new empty object literal
+var UI = UI || {};
 var enemies = enemies || {};
 
 enemies.main = {
+    // level variable
+    level: 1,
     // master list of active enemies
     enemyObjs: [],
     // enemy type "enum"
@@ -23,9 +26,21 @@ enemies.main = {
     },
     
     create : function () {
-        this.addEnemy(this.enemyType.TYPE1);
-        this.addEnemy(this.enemyType.TYPE2);
-        this.addEnemy(this.enemyType.TYPE3);
+        for(var i = 0; i <= this.level; i++){
+            var enemySelect = (Math.ceil((Math.random()*3)%3));
+            console.log(enemySelect);
+            switch (enemySelect){
+                case 1:
+                    this.addEnemy(this.enemyType.TYPE1);
+                    break;
+                case 2:
+                    this.addEnemy(this.enemyType.TYPE2);
+                    break;
+                case 3:
+                    this.addEnemy(this.enemyType.TYPE3);
+                    break;
+            }
+        }
     },
     
     update : function () {
@@ -55,8 +70,14 @@ enemies.main = {
                     sprite: game.add.sprite(0, 40, 'enemy1'),
                     health: 60,
                     enemyType: _enemyType,
+                    speed: 2,
+                    onscreen: false,
                     update: function(){
-                        eo.sprite.x += 2;
+                        eo.sprite.x += eo.speed;
+                        if(eo.sprite.x > game.width/2) eo.onscreen = true;
+                        if(eo.onscreen){
+                            if (eo.hitScreenEdge()) eo.speed *= -1; 
+                        }
                     }
                 }
                 //rescale the sprite
@@ -66,10 +87,16 @@ enemies.main = {
             case this.enemyType.TYPE2: //generate an enemy of type 2
                 eo = {
                     sprite: game.add.sprite(game.width, 150, 'enemy2'),
-                    health: 120,
+                    health: 60,
                     enemyType: _enemyType,
+                    speed: 2,
+                    onscreen: false,
                     update: function(){
-                        eo.sprite.x -= 2;
+                        eo.sprite.x -= eo.speed;
+                        if(eo.sprite.x < game.width/2) eo.onscreen = true;
+                        if(eo.onscreen){
+                            if (eo.hitScreenEdge()) eo.speed *= -1; 
+                        }
                     }
                 }
                 //rescale the sprite
@@ -80,8 +107,14 @@ enemies.main = {
                     sprite: game.add.sprite(game.width/2, 0, 'enemy3'),
                     health: 60,
                     enemyType: _enemyType,
+                    speed: 2,
+                    onscreen: false,
                     update: function(){
-                        eo.sprite.y += 2;
+                        eo.sprite.y += eo.speed;
+                        if(eo.sprite.y > game.height/2) eo.onscreen = true;
+                        if(eo.onscreen){
+                            if (eo.hitScreenEdge()) eo.speed *= -1; 
+                        }
                     }
                 }
                 //rescale the sprite
@@ -96,15 +129,22 @@ enemies.main = {
         //method to check if the enemy has either run out of health or left the screen
         eo.isAlive = function(){
             //if the enemy is out of health
-            if (this.health <= 0) return false;
-            //if the enemy is off screen
-            if (this.sprite.x < 0-this.sprite.width*2||//left
-                this.sprite.x > 0+game.width+this.sprite.width||//right
-                this.sprite.y < 0-this.sprite.height*2||//top
-                this.sprite.y > 0+game.height+this.sprite.height)//bottom
+            if (this.health <= 0){
+                UI.main.score++;
                 return false;
+            }
+            
             //otherwise
             return true;
+        }
+        eo.hitScreenEdge = function(){
+            if (this.sprite.x < 0||//left
+                this.sprite.x + this.sprite.width > 0+game.width||//right
+                this.sprite.y < 0||//top
+                this.sprite.y + this.sprite.height > 0+game.height){//bottom
+                    return true;
+            }
+            return false;
         }
         //push the generated enemy onto the array of enemies
         this.enemyObjs.push(eo);

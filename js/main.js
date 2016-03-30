@@ -82,6 +82,13 @@ bulletHeck.main = {
                 UI.main.gameState = UI.main.GAME_STATE.GAME_OVER;
                 UI.main.create();
             }
+            
+            //If there are no more enemies, move to level complete state
+            if(enemies.main.enemyObjs.length <= 0){
+                UI.main.gameState = UI.main.GAME_STATE.LEVEL_COMPLETE;
+                UI.main.create();
+                enemies.main.level++;
+            }
         }
     }
 };

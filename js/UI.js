@@ -8,6 +8,10 @@ var player = player || {};
 var enemies = enemies || {};
 
 UI.main = {
+    //Score
+    score: 0,
+    text: null,
+    
     //buttons: GAME_STATE_functionButton
     MAIN_MENU_playButton: undefined,
     IN_LEVEL_pauseButton: undefined,
@@ -80,6 +84,9 @@ UI.main = {
     },
     
     update: function(){
+        var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+        if(this.text != null) this.text.destroy();
+        this.text = game.add.text(game.width - 135, 0, "Score: " + this.score, style);
     },
     
     //Begin playing the game from the main menu
@@ -152,6 +159,8 @@ UI.main = {
         this.gameState = this.GAME_STATE.IN_LEVEL;
         this.LEVEL_COMPLETE_nextLevelButton.destroy();
         //rebuild the UI for the current gamestate
-        this.create();  
+        this.create(); 
+        player.main.create();
+        enemies.main.create();
     },
 }
