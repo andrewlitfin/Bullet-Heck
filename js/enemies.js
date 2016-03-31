@@ -26,6 +26,11 @@ enemies.main = {
     },
     
     create : function () {
+        // depopulate enemyobjs just in case
+        for (var i = 0; i < this.enemyObjs.length; i++)
+            if (this.enemyObjs[i])
+                this.enemyObjs[i].sprite.destroy();
+        this.enemyObjs = [];
         for(var i = 0; i <= this.level; i++){
             var enemySelect = (Math.ceil((Math.random()*3)%3));
             console.log(enemySelect);
