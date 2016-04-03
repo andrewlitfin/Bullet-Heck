@@ -13,9 +13,14 @@ player.main = {
     STARTING_HEALTH: 3,
     health: 3,
     
-    //bullets
+    //Array of bullets that will be populated by bullet objects:
+    //  Bullet Object Layout
+    //      bullet = {
+    //          bulletSprite: the sprite for the bullet,
+    //          bulletVel: the velocity of the bullet,
+    //      },
     bullets: [],
-    bulletSpeed: 20,
+    bulletSpeed: 20, //the speed of our bullets
     
     //keyboard inputs
     keyUp: undefined,
@@ -102,8 +107,8 @@ player.main = {
         }
         
         //rotate the players to face the center of the screen
-        this.playerObj1.rotation = 1 * (game.math.angleBetween(game.width/2, game.height/2, this.playerObj1.x, this.playerObj1.y) - Math.PI/2);
-        this.playerObj2.rotation = 1 * (game.math.angleBetween(this.playerObj2.x, this.playerObj2.y, game.width/2, game.height/2) + Math.PI/2);
+        this.playerObj1.rotation = (game.math.angleBetween(game.width/2, game.height/2, this.playerObj1.x, this.playerObj1.y) - Math.PI/2);
+        this.playerObj2.rotation = (game.math.angleBetween(this.playerObj2.x, this.playerObj2.y, game.width/2, game.height/2) + Math.PI/2);
         
         if(this.keySpace.isDown){
             this.fireBullet();
@@ -113,12 +118,32 @@ player.main = {
         for (var i = 0; i < this.bullets.length; i++){
             //move the bullets every frame
             if (this.bullets[i] != null){
-                this.bullets[i].y -= this.bulletSpeed;
+                this.bullets[i].bulletSprite.x += this.bullets[i].bulletVel.x;
+                this.bullets[i].bulletSprite.y += this.bullets[i].bulletVel.y;
             }
             //destroy the bullets when they go off screen
             if (this.bullets[i] != null){
-                if (this.bullets[i].y < -10){
-                    this.bullets[i].destroy();
+                //if the bullet goes off the top of the screen
+                if (this.bullets[i].bulletSprite.y < -10){
+                    this.bullets[i].bulletSprite.destroy();
+                    this.bullets.splice(i, 1);
+                    i--;
+                }
+                //if the bullet goes off the bottom of the screen
+                else if (this.bullets[i].bulletSprite.y > game.height + 10){
+                    this.bullets[i].bulletSprite.destroy();
+                    this.bullets.splice(i, 1);
+                    i--;
+                }
+                //if the bullet goes off the left of the screen
+                else if (this.bullets[i].bulletSprite.x < - 10){
+                    this.bullets[i].bulletSprite.destroy();
+                    this.bullets.splice(i, 1);
+                    i--;
+                }
+                //if the bullet goes off the right of the screen
+                else if (this.bullets[i].bulletSprite.x > game.width + 10){
+                    this.bullets[i].bulletSprite.destroy();
                     this.bullets.splice(i, 1);
                     i--;
                 }
@@ -128,10 +153,29 @@ player.main = {
     
     fireBullet : function(){
         //create a bullet for the first ship
-        this.bullets.push(game.add.sprite(this.playerObj1.x, this.playerObj1.y, 'bullet'));
-        this.bullets[this.bullets.length-1].x -= this.bullets[this.bullets.length-1].width/2;
+        var bullet1 = {
+            bulletSprite: game.add.sprite(this.playerObj1.x, this.playerObj1.y, 'bullet'),
+            bulletSpeed: 20,
+            bulletVel: {
+                x:-1 * Math.cos(Math.PI/2 + this.playerObj1.rotation) * 20,
+                y:-1 * Math.sin(Math.PI/2 + this.playerObj1.rotation) * 20,
+            },
+        };
+        bullet1.bulletSprite.anchor.x = 0.5;
+        bullet1.bulletSprite.anchor.y = 0.5;
         //create a bullet for the second ship
-        this.bullets.push(game.add.sprite(this.playerObj2.x, this.playerObj2.y, 'bullet'));
-        this.bullets[this.bullets.length-1].x -= this.bullets[this.bullets.length-1].width/2;
+        var bullet2 = {
+            bulletSprite: game.add.sprite(this.playerObj2.x, this.playerObj2.y, 'bullet'),
+            bulletVel: {
+                x:Math.cos(Math.PI/2 - this.playerObj2.rotation) * 20,
+                y:-1 * Math.sin(Math.PI/2 - this.playerObj2.rotation) * 20,
+            },
+        };
+        bullet2.bulletSprite.anchor.x = 0.5;
+        bullet2.bulletSprite.anchor.y = 0.5;
+        
+        //push both bullets onto the bullet array
+        this.bullets.push(bullet1);
+        this.bullets.push(bullet2);
     },
 }

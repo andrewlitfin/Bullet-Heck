@@ -44,7 +44,7 @@ bulletHeck.main = {
             //Player Bullet on Enemy
             for (var i = 0; i < player.main.bullets.length; i++){
                 for (var j = 0; j < enemies.main.enemyObjs.length; j++){
-                    var bulletSprite = player.main.bullets[i];
+                    var bulletSprite = player.main.bullets[i].bulletSprite;
                     var enemySprite = enemies.main.enemyObjs[j].sprite;
                     if (bulletSprite.x < enemySprite.x-15 + enemySprite.width &&
                        bulletSprite.x + bulletSprite.width > enemySprite.x+15 &&
@@ -52,7 +52,7 @@ bulletHeck.main = {
                        bulletSprite.y + bulletSprite.height > enemySprite.y+15){
                         //HANDLE COLLISION HERE
                         enemies.main.enemyObjs[j].health--;
-                        player.main.bullets[i].destroy();
+                        player.main.bullets[i].bulletSprite.destroy();
                         player.main.bullets.splice(i, 1);
                         i--;
                         break;
