@@ -7,7 +7,8 @@ var player = player || {};
 
 player.main = {
     //player and related attributes
-    playerObj : undefined,
+    playerObj1 : undefined,
+    playerObj2 : undefined,
     speed: 5,
     STARTING_HEALTH: 1,
     health: undefined,
@@ -23,7 +24,7 @@ player.main = {
     keyRight: undefined,
     keySpace: undefined,
 
-    preload : function(){
+    preload : function(){        
         //load images
         game.load.image('player', 'assets/player/ship.png');
         game.load.image('bullet', 'assets/player/bullet.png'); 
@@ -37,11 +38,20 @@ player.main = {
     },
     
     create : function(){
-        //create the player Object and center it on the screen
-        this.playerObj = game.add.sprite(game.width/2, game.height, 'player');
-        this.playerObj.scale.set(0.2,0.2);
-        this.playerObj.x -= this.playerObj.width/2;
-        this.playerObj.y -= this.playerObj.height + 20;
+        //create the first player object and center it on the screen
+        this.playerObj1 = game.add.sprite(game.width/2, game.height, 'player');
+        this.playerObj1.x -= this.playerObj1.width;
+        this.playerObj1.scale.set(0.2,0.2);
+        this.playerObj1.x -= this.playerObj1.width/2 - 200;
+        this.playerObj1.y -= this.playerObj1.height + 20;
+        
+        //create the second player object and center it on the screen
+        this.playerObj2 = game.add.sprite(game.width/2, game.height, 'player');
+        this.playerObj2.x += this.playerObj2.width;
+        this.playerObj2.scale.set(0.2,0.2);
+        this.playerObj2.x -= this.playerObj2.width/2 + 200;
+        this.playerObj2.y -= this.playerObj2.height + 20;
+        
         this.health = this.STARTING_HEALTH;
     },
         
@@ -53,29 +63,50 @@ player.main = {
         }
         
         if (this.keyLeft.isDown){
-            //keep the player from going off the screen to the left
-            if(this.playerObj.x > 0){
-                this.playerObj.x -= this.speed;
+            //keep the first player from going off the screen to the left
+            if(this.playerObj1.x > 0){
+                this.playerObj1.x -= this.speed;
+            }
+            //keep the second player from going off the screen to the left
+            if(this.playerObj2.x < game.width - this.playerObj2.width){
+                this.playerObj2.x += this.speed;
             }
         }
         if (this.keyRight.isDown){
-            //keep the player from going off the screeen to the right
-            if (this.playerObj.x < game.width - this.playerObj.width){
-                this.playerObj.x += this.speed;
+            //keep the first player from going off the screeen to the right
+            if (this.playerObj1.x < game.width - this.playerObj1.width){
+                this.playerObj1.x += this.speed;
+            }
+            //keep the second player from going off the screeen to the right
+            if (this.playerObj2.x > 0){
+                this.playerObj2.x -= this.speed;
             }
         }
         if (this.keyUp.isDown){
-            //keep the player from going off the top of the screen
-            if (this.playerObj.y > 0){
-                this.playerObj.y -= this.speed; 
+            //keep the first player from going off the top of the screen
+            if (this.playerObj1.y > 0){
+                this.playerObj1.y -= this.speed; 
+            }
+            //keep the second player from going off the top of the screen
+            if (this.playerObj2.y > 0){
+                this.playerObj2.y -= this.speed; 
             }
         }
         if(this.keyDown.isDown){
-            //keep the player from going off the bottom of the screen
-            if(this.playerObj.y < game.height - this.playerObj.height){
-                this.playerObj.y += this.speed;
+            //keep the first player from going off the bottom of the screen
+            if(this.playerObj1.y < game.height - this.playerObj1.height){
+                this.playerObj1.y += this.speed;
+            }
+            //keep the second player from going off the bottom of the screen
+            if(this.playerObj2.y < game.height - this.playerObj2.height){
+                this.playerObj2.y += this.speed;
             }
         }
+        
+        //rotate the players to face the center of the screen
+        //this.playerObj1.rotation = game.math.angleBetween(game.width/2, game.height/2, this.playerObj1.x, this.playerObj1.y);
+        //this.playerObj2.rotation = game.math.angleBetween(this.playerObj2.x, this.playerObj2.y, game.width/2, game.height/2);
+        
         if(this.keySpace.isDown){
             this.fireBullet();
         }
@@ -98,7 +129,11 @@ player.main = {
     },
     
     fireBullet : function(){
-        this.bullets.push(game.add.sprite(this.playerObj.x + this.playerObj.width/2, this.playerObj.y, 'bullet'));
+        //create a bullet for the first ship
+        this.bullets.push(game.add.sprite(this.playerObj1.x + this.playerObj1.width/2, this.playerObj1.y, 'bullet'));
+        this.bullets[this.bullets.length-1].x -= this.bullets[this.bullets.length-1].width/2;
+        //create a bullet for the second ship
+        this.bullets.push(game.add.sprite(this.playerObj2.x + this.playerObj2.width/2, this.playerObj2.y, 'bullet'));
         this.bullets[this.bullets.length-1].x -= this.bullets[this.bullets.length-1].width/2;
     },
 }

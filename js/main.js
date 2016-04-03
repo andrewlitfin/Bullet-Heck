@@ -9,7 +9,7 @@ var UI = UI || {};
 
 bulletHeck.main = {    
     //preload function for calling via phaser
-    preload : function() {     
+    preload : function() {
         //preload UI
         UI.main.preload();
 
@@ -65,12 +65,17 @@ bulletHeck.main = {
             
             //Enemy on Player
             for (var i = 0; i < enemies.main.enemyObjs.length; i++){
-                var playerSprite = player.main.playerObj;
+                var playerSprite1 = player.main.playerObj1;
+                var playerSprite2 = player.main.playerObj2;
                 var enemySprite = enemies.main.enemyObjs[i].sprite;
-                if (playerSprite.x < enemySprite.x + enemySprite.width &&
-                   playerSprite.x + playerSprite.width > enemySprite.x &&
-                   playerSprite.y < enemySprite.y + enemySprite.height &&
-                   playerSprite.y + playerSprite.height > enemySprite.y){
+                if (playerSprite1.x < enemySprite.x + enemySprite.width &&
+                   playerSprite1.x + playerSprite1.width > enemySprite.x &&
+                   playerSprite1.y < enemySprite.y + enemySprite.height &&
+                   playerSprite1.y + playerSprite1.height > enemySprite.y &&
+                   playerSprite2.x < enemySprite.x + enemySprite.width &&
+                   playerSprite2.x + playerSprite2.width > enemySprite.x &&
+                   playerSprite2.y < enemySprite.y + enemySprite.height &&
+                   playerSprite2.y + playerSprite2.height > enemySprite.y){
                     //HANDLE COLLISION HERE
                     enemies.main.enemyObjs[i].health = 0;
                     player.main.health--;

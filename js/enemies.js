@@ -26,10 +26,12 @@ enemies.main = {
     },
     
     create : function () {
+        console.log("Game Width: " + game.width + " Game Height: " + game.height);
         // depopulate enemyobjs just in case
         for (var i = 0; i < this.enemyObjs.length; i++)
             if (this.enemyObjs[i])
                 this.enemyObjs[i].sprite.destroy();
+        // then populate the enemy objs
         this.enemyObjs = [];
         for(var i = 0; i <= this.level; i++){
             var enemySelect = (Math.ceil((Math.random()*3)%3));
@@ -72,7 +74,7 @@ enemies.main = {
         switch(_enemyType){
             case this.enemyType.TYPE1: //generate an enemy of type 1
                 eo = {
-                    sprite: game.add.sprite(0, 40, 'enemy1'),
+                    sprite: game.add.sprite(0, (Math.random()*400)%400 + game.height/7, 'enemy1'),
                     health: 60,
                     enemyType: _enemyType,
                     speed: 2,
@@ -91,7 +93,7 @@ enemies.main = {
                 break;
             case this.enemyType.TYPE2: //generate an enemy of type 2
                 eo = {
-                    sprite: game.add.sprite(game.width, 150, 'enemy2'),
+                    sprite: game.add.sprite(game.width, (Math.random()*400)%400 + game.height/7, 'enemy2'),
                     health: 60,
                     enemyType: _enemyType,
                     speed: 2,
@@ -109,7 +111,7 @@ enemies.main = {
                 break;
             case this.enemyType.TYPE3: //generate an enemy of type 3
                 eo = {
-                    sprite: game.add.sprite(game.width/2, 0, 'enemy3'),
+                    sprite: game.add.sprite((Math.random()*300)%300 + game.width/4, 0, 'enemy3'),
                     health: 60,
                     enemyType: _enemyType,
                     speed: 2,

@@ -86,7 +86,8 @@ UI.main = {
     update: function(){
         var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
         if(this.text != null) this.text.destroy();
-        this.text = game.add.text(game.width - 135, 0, "Score: " + this.score, style);
+        this.text = game.add.text(game.width - 20, 10, "Score: " + this.score, style);
+        this.text.x -= this.text.width;
     },
     
     //Begin playing the game from the main menu
