@@ -40,16 +40,14 @@ player.main = {
     create : function(){
         //create the first player object and center it on the screen
         this.playerObj1 = game.add.sprite(game.width/2, game.height, 'player');
-        this.playerObj1.x -= this.playerObj1.width;
         this.playerObj1.scale.set(0.2,0.2);
-        this.playerObj1.x -= this.playerObj1.width/2 - 200;
+        this.playerObj1.x -= this.playerObj1.width/2;
         this.playerObj1.y -= this.playerObj1.height + 20;
         
         //create the second player object and center it on the screen
         this.playerObj2 = game.add.sprite(game.width/2, game.height, 'player');
-        this.playerObj2.x += this.playerObj2.width;
         this.playerObj2.scale.set(0.2,0.2);
-        this.playerObj2.x -= this.playerObj2.width/2 + 200;
+        this.playerObj2.x -= this.playerObj2.width/2;
         this.playerObj2.y -= this.playerObj2.height + 20;
         
         this.health = this.STARTING_HEALTH;
@@ -104,8 +102,8 @@ player.main = {
         }
         
         //rotate the players to face the center of the screen
-        //this.playerObj1.rotation = game.math.angleBetween(game.width/2, game.height/2, this.playerObj1.x, this.playerObj1.y);
-        //this.playerObj2.rotation = game.math.angleBetween(this.playerObj2.x, this.playerObj2.y, game.width/2, game.height/2);
+//        this.playerObj1.rotation = -1 * game.math.angleBetween(game.width/2, game.height/2, this.playerObj1.x, this.playerObj1.y);
+//        this.playerObj2.rotation = -1 * game.math.angleBetween(this.playerObj2.x, this.playerObj2.y, game.width/2, game.height/2);
         
         if(this.keySpace.isDown){
             this.fireBullet();

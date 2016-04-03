@@ -71,14 +71,18 @@ bulletHeck.main = {
                 if (playerSprite1.x < enemySprite.x + enemySprite.width &&
                    playerSprite1.x + playerSprite1.width > enemySprite.x &&
                    playerSprite1.y < enemySprite.y + enemySprite.height &&
-                   playerSprite1.y + playerSprite1.height > enemySprite.y &&
-                   playerSprite2.x < enemySprite.x + enemySprite.width &&
-                   playerSprite2.x + playerSprite2.width > enemySprite.x &&
-                   playerSprite2.y < enemySprite.y + enemySprite.height &&
-                   playerSprite2.y + playerSprite2.height > enemySprite.y){
+                   playerSprite1.y + playerSprite1.height > enemySprite.y){
                     //HANDLE COLLISION HERE
                     enemies.main.enemyObjs[i].health = 0;
                     player.main.health--;
+                }
+                if (playerSprite2.x < enemySprite.x + enemySprite.width &&
+                   playerSprite2.x + playerSprite2.width > enemySprite.x &&
+                   playerSprite2.y < enemySprite.y + enemySprite.height &&
+                   playerSprite2.y + playerSprite2.height > enemySprite.y){
+                   //HANDLE COLLISION HERE
+                    enemies.main.enemyObjs[i].health = 0;
+                    player.main.health--; 
                 }
             }
             
