@@ -133,7 +133,6 @@ UI.main = {
             switch (player.main.health){
                 case 3:
                     this.heart1 = game.add.sprite(10, 10, 'fullHeart');
-                    this.heart1.scale.set(2.0,2.0);
                     this.heart2 = game.add.sprite(50, 10, 'fullHeart');
                     this.heart3 = game.add.sprite(90, 10, 'fullHeart');
                     this.heart1.scale.set(2.5,2.5);
@@ -179,6 +178,8 @@ UI.main = {
         }
         this.buttonsToDestroyArray = [];
         this.buttonsToDrawArray = [];
+        //reset the player health
+        player.main.health = player.main.STARTING_HEALTH;
         //rebuild the UI for the current gamestate
         this.create();
         //create the player objects
