@@ -43,6 +43,15 @@ player.main = {
     },
     
     create : function(){
+        if(this.playerObj1) this.playerObj1.destroy();
+        if(this.playerObj2) this.playerObj2.destroy();
+        if(this.bullets.length > 0){
+            for (var i = 0; i < this.bullets.length; i++){
+                this.bullets[i].bulletSprite.destroy();
+            }
+            this.bullets = [];
+        }
+        
         //create the first player object and center it on the screen
         this.playerObj1 = game.add.sprite(game.width/2, game.height, 'player');
         this.playerObj1.scale.set(0.2,0.2);
@@ -59,9 +68,9 @@ player.main = {
     },
         
     update : function(){
+        console.log("NumBullets: " + this.bullets.length);
         //if the player is dead
         if (this.health <= 0){
-            console.log("You are dead");
             return;
         }
         

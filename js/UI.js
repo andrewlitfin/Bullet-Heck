@@ -10,7 +10,8 @@ var enemies = enemies || {};
 UI.main = {
     //Score
     score: 0,
-    text: null,
+    scoreText: null,
+    instructionsText: null,
     
     //Three hearts for player health
     heart1: undefined,
@@ -55,9 +56,7 @@ UI.main = {
         this.keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
     },
     
-    create: function(){
-        console.log("Gamestate: " + this.gameState);
-        
+    create: function(){        
         if(this.gameState != this.GAME_STATE.PAUSE && this.gameState != this.GAME_STATE.IN_LEVEL){
             //  A simple background for our game
             game.add.sprite(0, 0, 'space');
@@ -66,6 +65,12 @@ UI.main = {
         //establish MAIN_MENU UI
         if(this.gameState == this.GAME_STATE.MAIN_MENU){
             this.buttonsToDrawArray.push(0);
+            //Add instructions text
+            var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle", align: "center" };
+            
+            this.instructionsText = game.add.text(game.width/2, 80, "Arrow Keys to Move\nSpace Bar to Fire\nPress Play to Begin", style);
+            
+            this.instructionsText.x -= this.instructionsText.width/2;
         }
         
         //establish IN_LEVEL UI
@@ -122,9 +127,10 @@ UI.main = {
     update: function(){
         //print the game score to the top right
         var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
-        if(this.text != null) this.text.destroy();
-        this.text = game.add.text(game.width - 20, 10, "Score: " + this.score, style);
-        this.text.x -= this.text.width;
+        
+        if(this.scoreText != null) this.scoreText.destroy();
+        this.scoreText = game.add.text(game.width - 20, 10, "Score: " + this.score, style);
+        this.scoreText.x -= this.scoreText.width;
         //put hearts in the top left if you are in a game state where they are relevant
         if (this.gameState == this.GAME_STATE.IN_LEVEL ||
             this.gameState == this.GAME_STATE.LEVEL_COMPLETE ||
@@ -178,12 +184,19 @@ UI.main = {
         }
         this.buttonsToDestroyArray = [];
         this.buttonsToDrawArray = [];
-        //reset the player health
-        player.main.health = player.main.STARTING_HEALTH;
+        //reset the score
+        this.score = 0;
+        this.instructionsText.destroy();
         //rebuild the UI for the current gamestate
         this.create();
+        
+        //reset the player health
+        player.main.health = player.main.STARTING_HEALTH;
         //create the player objects
         player.main.create();
+        
+        //reset the level count
+        enemies.main.level = enemies.main.startingLevel;
         //create the enemy objects
         enemies.main.create();
     },
