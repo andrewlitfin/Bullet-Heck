@@ -45,6 +45,7 @@ bulletHeck.main = {
             
             //CHECK FOR COLLISONS//
             //Player Bullet on Enemy
+/*
             for (var i = 0; i < player.main.bullets.length; i++){
                 for (var j = 0; j < enemies.main.enemyObjs.length; j++){
                     var bulletSprite = player.main.bullets[i].bulletSprite;
@@ -62,6 +63,7 @@ bulletHeck.main = {
                     }
                 }
             }
+*/
             
             //Enemy Bullet on Player
             //TODO

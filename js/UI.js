@@ -136,7 +136,7 @@ UI.main = {
         //print the game score to the top right
         var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
         
-        if(this.scoreText != null) this.scoreText.kil();
+        if(this.scoreText != null) this.scoreText.kill();
         this.scoreText = game.add.text(game.width - 20, 10, "Score: " + this.score, style);
         this.scoreText.x -= this.scoreText.width;
         //put hearts in the top left if you are in a game state where they are relevant
