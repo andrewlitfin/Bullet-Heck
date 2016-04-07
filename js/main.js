@@ -7,9 +7,14 @@ var player = player || {};
 var enemies = enemies || {};
 var UI = UI || {};
 
-bulletHeck.main = {    
+bulletHeck.main = { 
+    background: undefined,    
+    
     //preload function for calling via phaser
     preload : function() {
+        //background
+        game.load.image('space', 'assets/background.jpg');
+        
         //preload UI
         UI.main.preload();
 
@@ -22,7 +27,7 @@ bulletHeck.main = {
     
     //create function for calling via phaser
     create : function() {
-        game.add.tileSprite(0, 0, game.width, game.height, 'space');
+        this.background = game.add.tileSprite(0, 0, game.width, game.height, 'space');
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
         //create UI
@@ -33,6 +38,9 @@ bulletHeck.main = {
     
     //update function for calling via phaser
     update : function() {
+        //update background
+        this.background.tilePosition.y += 1.1;
+        
         //update UI
         UI.main.update();
         

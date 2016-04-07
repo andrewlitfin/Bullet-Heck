@@ -40,9 +40,6 @@ UI.main = {
     preload: function(){
         this.gameState = this.GAME_STATE.MAIN_MENU;
         
-        //background
-        game.load.image('space', 'assets/background.jpg');
-        
         //hearts
         game.load.image('fullHeart', 'assets/UI/Hearts/heart_sharp.png');
         game.load.image('emptyHeart', 'assets/UI/Hearts/heart_sharp_empty.png');
@@ -60,12 +57,7 @@ UI.main = {
         this.keyEnter = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     },
     
-    create: function(){        
-        if(this.gameState != this.GAME_STATE.PAUSE && this.gameState != this.GAME_STATE.IN_LEVEL){
-            //  A simple background for our game
-            //game.add.sprite(0, 0, 'space');
-        }
-        
+    create: function(){
         //establish MAIN_MENU UI
         if(this.gameState == this.GAME_STATE.MAIN_MENU){
             this.buttonsToDrawArray.push(0);
@@ -196,8 +188,6 @@ UI.main = {
     
     //A function which handles all UI button presses with a switch statement
     buttonPressed: function(buttonKey) {
-        console.log("Button Key: " + buttonKey);
-        console.log("Pressed a Button");
         switch (buttonKey){
             case "playButton":
                 //update the gamestate
@@ -272,6 +262,8 @@ UI.main = {
     pauseToggle: function() {
         //if the game is paused
         if (this.gameState == this.GAME_STATE.PAUSE){
+            //enable physics
+            player.main.bullets.setAll("body.enable", true);
             //unpause it
             this.buttonPressed('unpauseButton');
             return;
@@ -280,6 +272,8 @@ UI.main = {
         if(this.gameState == this.GAME_STATE.IN_LEVEL){
             //update the gamestate
             this.gameState = this.GAME_STATE.PAUSE;
+            //disable physics
+            player.main.bullets.setAll("body.enable", false);
             //rebuild the UI for the current gamestate
             this.create();
         }
