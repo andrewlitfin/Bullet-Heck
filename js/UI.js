@@ -92,6 +92,7 @@ UI.main = {
             this.buttonsToDrawArray.push(2);
         }
         
+        //draw the buttons onto the screen based on the buttons loaded in on the game state change
         for (var i = 0; i < this.buttonsToDrawArray.length; i++){
             switch (this.buttonsToDrawArray[i]){
                 case 0: //this.UI_BUTTON_TYPE.PLAY_BUTTON:
@@ -121,7 +122,6 @@ UI.main = {
             this.keyP.onDown.addOnce(function(){this.buttonPressed('unpauseButton')}, this, 0);
             this.keyEsc.onDown.addOnce(function(){this.buttonPressed('unpauseButton')}, this, 0);
         }
-        
         else if (this.gameState == this.GAME_STATE.IN_LEVEL){
             this.keyP.onDown.addOnce(function(){this.buttonPressed('pauseButton')}, this, 0);
             this.keyEsc.onDown.addOnce(function(){this.buttonPressed('pauseButton')}, this, 0);
@@ -205,6 +205,7 @@ UI.main = {
                 }
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
+                this.instructionsText.kill();
                 //reset the score
                 this.score = 0;
                 this.instructionsText.kill();
@@ -246,12 +247,23 @@ UI.main = {
             case "mainMenuButton":
                 //update the gamestate
                 this.gameState = this.GAME_STATE.MAIN_MENU;
+                
                 //destroy all the buttons
                 for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
                     this.buttonsToDestroyArray[i].kill();
                 }
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
+                
+                //delete the enemies off the screen
+                for(var i = 0; i < enemies.main.enemyObjs.length; i++){
+                    enemies.main.enemyObjs[i].sprite.kill();
+                }
+                enemies.main.enemyObjs = [];
+                
+                //delete the bullets off the screen
+                player.main.bullets.destroy();
+                
                 //rebuild the UI for the current gamestate
                 this.create();
                 break;
