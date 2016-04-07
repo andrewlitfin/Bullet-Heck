@@ -71,9 +71,9 @@ player.main = {
     },
         
     update : function(){
+        console.log("NumBullets: " + this.bullets.length);
         //if the player is dead
         if (this.health <= 0){
-            console.log("You are dead");
             return;
         }
         

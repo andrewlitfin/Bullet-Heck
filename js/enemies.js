@@ -8,6 +8,7 @@ var enemies = enemies || {};
 enemies.main = {
     // level variable
     level: 1,
+    startingLevel: 1,
     // master list of active enemies
     enemyObjs: [],
     // enemy type "enum"
@@ -26,7 +27,6 @@ enemies.main = {
     },
     
     create : function () {
-        console.log("Game Width: " + game.width + " Game Height: " + game.height);
         // depopulate enemyobjs just in case
         for (var i = 0; i < this.enemyObjs.length; i++)
             if (this.enemyObjs[i])
@@ -35,7 +35,6 @@ enemies.main = {
         this.enemyObjs = [];
         for(var i = 0; i <= this.level; i++){
             var enemySelect = (Math.ceil((Math.random()*3)%3));
-            console.log(enemySelect);
             switch (enemySelect){
                 case 1:
                     this.addEnemy(this.enemyType.TYPE1);
@@ -51,6 +50,7 @@ enemies.main = {
     },
     
     update : function () {
+        console.log("Num Enemies: " + this.enemyObjs.length);
         // note to future self:
         // enemies are added with enemyObjs.push([enemy object])
         // and removed with enemyObjs.splice([index], 1)
