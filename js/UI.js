@@ -60,7 +60,7 @@ UI.main = {
         
         if(this.gameState != this.GAME_STATE.PAUSE && this.gameState != this.GAME_STATE.IN_LEVEL){
             //  A simple background for our game
-            game.add.sprite(0, 0, 'space');
+            //game.add.sprite(0, 0, 'space');
         }
         
         //establish MAIN_MENU UI

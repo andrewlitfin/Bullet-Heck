@@ -21,7 +21,10 @@ bulletHeck.main = {
     },
     
     //create function for calling via phaser
-    create : function() {        
+    create : function() {
+        game.add.tileSprite(0, 0, game.width, game.height, 'space');
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+        
         //create UI
         UI.main.create();
         

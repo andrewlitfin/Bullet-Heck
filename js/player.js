@@ -19,8 +19,10 @@ player.main = {
     //          bulletSprite: the sprite for the bullet,
     //          bulletVel: the velocity of the bullet,
     //      },
-    bullets: [],
-    bulletSpeed: 20, //the speed of our bullets
+    bullets: undefined,
+    bulletSpeed: 800, //the speed of our bullets
+    bulletTime: 0, // a way to space out the firing of bullets
+    bulletTimeDelay: 60, // delay between bullets firing (ms)
     
     //keyboard inputs
     keyUp: undefined,
@@ -43,20 +45,28 @@ player.main = {
     },
     
     create : function(){
+        // create the bullets group
+        this.bullets = game.add.group();
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        
+        // create all the bullets we will need
+        this.bullets.createMultiple(150, 'bullet');
+        this.bullets.setAll('anchor.x', 0.5);
+        this.bullets.setAll('anchor.y', 0.5);
+        
         //create the first player object and center it on the screen
         if (this.playerObj1) this.playerObj1.destroy();
         this.playerObj1 = game.add.sprite(game.width/2, game.height, 'player');
         this.playerObj1.scale.set(0.2,0.2);
-        this.playerObj1.anchor.x = 0.5;
-        this.playerObj1.anchor.y = 0.5;
+        this.playerObj1.anchor.set(0.5);
         this.playerObj1.y -= this.playerObj1.height + 20;
         
         //create the second player object and center it on the screen
         if (this.playerObj2) this.playerObj2.destroy();
         this.playerObj2 = game.add.sprite(game.width/2, game.height, 'player');
         this.playerObj2.scale.set(0.2,0.2);
-        this.playerObj2.anchor.x = 0.5;
-        this.playerObj2.anchor.y = 0.5;
+        this.playerObj2.anchor.set(0.5);
         this.playerObj2.y -= this.playerObj2.height + 20;
     },
         
@@ -116,68 +126,37 @@ player.main = {
             this.fireBullet();
         }
         
-        //update the bullets
-        for (var i = 0; i < this.bullets.length; i++){
-            //move the bullets every frame
-            if (this.bullets[i] != null){
-                this.bullets[i].bulletSprite.x += this.bullets[i].bulletVel.x;
-                this.bullets[i].bulletSprite.y += this.bullets[i].bulletVel.y;
-            }
-            //destroy the bullets when they go off screen
-            if (this.bullets[i] != null){
-                //if the bullet goes off the top of the screen
-                if (this.bullets[i].bulletSprite.y < -10){
-                    this.bullets[i].bulletSprite.destroy();
-                    this.bullets.splice(i, 1);
-                    i--;
-                }
-                //if the bullet goes off the bottom of the screen
-                else if (this.bullets[i].bulletSprite.y > game.height + 10){
-                    this.bullets[i].bulletSprite.destroy();
-                    this.bullets.splice(i, 1);
-                    i--;
-                }
-                //if the bullet goes off the left of the screen
-                else if (this.bullets[i].bulletSprite.x < - 10){
-                    this.bullets[i].bulletSprite.destroy();
-                    this.bullets.splice(i, 1);
-                    i--;
-                }
-                //if the bullet goes off the right of the screen
-                else if (this.bullets[i].bulletSprite.x > game.width + 10){
-                    this.bullets[i].bulletSprite.destroy();
-                    this.bullets.splice(i, 1);
-                    i--;
-                }
-            }
-        }
+        //the bullets will update on their own (Phaser)
     },
     
     fireBullet : function(){
-        //create a bullet for the first ship
-        var bullet1 = {
-            bulletSprite: game.add.sprite(this.playerObj1.x, this.playerObj1.y, 'bullet'),
-            bulletSpeed: 20,
-            bulletVel: {
-                x:-1 * Math.cos(Math.PI/2 + this.playerObj1.rotation) * 20,
-                y:-1 * Math.sin(Math.PI/2 + this.playerObj1.rotation) * 20,
-            },
-        };
-        bullet1.bulletSprite.anchor.x = 0.5;
-        bullet1.bulletSprite.anchor.y = 0.5;
-        //create a bullet for the second ship
-        var bullet2 = {
-            bulletSprite: game.add.sprite(this.playerObj2.x, this.playerObj2.y, 'bullet'),
-            bulletVel: {
-                x:Math.cos(Math.PI/2 - this.playerObj2.rotation) * 20,
-                y:-1 * Math.sin(Math.PI/2 - this.playerObj2.rotation) * 20,
-            },
-        };
-        bullet2.bulletSprite.anchor.x = 0.5;
-        bullet2.bulletSprite.anchor.y = 0.5;
-        
-        //push both bullets onto the bullet array
-        this.bullets.push(bullet1);
-        this.bullets.push(bullet2);
+        // if enough time has passed between the previous bullet firing and now
+        if (game.time.now > this.bulletTime)
+            {
+                // check if there's an available "dead" bullet
+                var bullet1 = this.bullets.getFirstExists(false);
+                if (bullet1)
+                    {
+                        // reset the bullet to be "alive" at the new position
+                        bullet1.reset(this.playerObj1.x, this.playerObj1.y);
+                        // set the lifespan (in ms)
+                        bullet1.lifespan = 1500;
+                       
+                       // give the bullet the appropriate velocity, based on playerobject rotation and bulletSpeed
+                        game.physics.arcade.velocityFromRotation(this.playerObj1.rotation - Math.PI/2, this.bulletSpeed, bullet1.body.velocity);
+                        
+                        // reset the timer
+                        this.bulletTime = game.time.now + this.bulletTimeDelay;
+                    }
+                var bullet2 = this.bullets.getFirstExists(false);
+                if (bullet2)
+                    {
+                        bullet2.reset(this.playerObj2.x, this.playerObj2.y);
+                        bullet2.lifespan = 1500;
+                        game.physics.arcade.velocityFromRotation(this.playerObj2.rotation - Math.PI/2, this.bulletSpeed, bullet2.body.velocity);
+                        
+                        this.bulletTime = game.time.now + this.bulletTimeDelay
+                    }
+            }
     },
 }
