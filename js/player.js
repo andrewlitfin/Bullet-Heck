@@ -44,6 +44,7 @@ player.main = {
     
     create : function(){
         //create the first player object and center it on the screen
+        if (this.playerObj1) this.playerObj1.destroy();
         this.playerObj1 = game.add.sprite(game.width/2, game.height, 'player');
         this.playerObj1.scale.set(0.2,0.2);
         this.playerObj1.anchor.x = 0.5;
@@ -51,6 +52,7 @@ player.main = {
         this.playerObj1.y -= this.playerObj1.height + 20;
         
         //create the second player object and center it on the screen
+        if (this.playerObj2) this.playerObj2.destroy();
         this.playerObj2 = game.add.sprite(game.width/2, game.height, 'player');
         this.playerObj2.scale.set(0.2,0.2);
         this.playerObj2.anchor.x = 0.5;

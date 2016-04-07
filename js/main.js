@@ -68,26 +68,26 @@ bulletHeck.main = {
                 var playerSprite1 = player.main.playerObj1;
                 var playerSprite2 = player.main.playerObj2;
                 var enemySprite = enemies.main.enemyObjs[i].sprite;
-                if (this.AABBCollision({x: playerSprite1.x - playerSprite1.width/2,
-                                        y: playerSprite1.y - playerSprite1.height/2,
-                                        width: playerSprite1.width,
-                                        height: playerSprite1.height},
-                                       {x: enemySprite.x, 
-                                        y: enemySprite.y,
-                                        width: enemySprite.width,
-                                        height: enemySprite.height})) {
+                if (this.AABBCollision(playerSprite1.x - playerSprite2.width/2,
+                                       playerSprite1.y - playerSprite2.height/2,
+                                       playerSprite1.width,
+                                       playerSprite1.height,
+                                       enemySprite.x,
+                                       enemySprite.y,
+                                       enemySprite.width,
+                                       enemySprite.height)) {
                     //HANDLE COLLISION HERE
                     enemies.main.enemyObjs[i].health = 0;
                     player.main.health--;
                 }
-                if (this.AABBCollision({x: playerSprite2.x - playerSprite2.width/2,
-                                        y: playerSprite2.y - playerSprite2.height/2,
-                                        width: playerSprite2.width,
-                                        height: playerSprite2.height},
-                                       {x: enemySprite.x,
-                                        y: enemySprite.y,
-                                        width: enemySprite.width,
-                                        height: enemySprite.height})) {
+                if (this.AABBCollision(playerSprite2.x - playerSprite2.width/2,
+                                       playerSprite2.y - playerSprite2.height/2,
+                                       playerSprite2.width,
+                                       playerSprite2.height,
+                                       enemySprite.x,
+                                       enemySprite.y,
+                                       enemySprite.width,
+                                       enemySprite.height)) {
                    //HANDLE COLLISION HERE
                     enemies.main.enemyObjs[i].health = 0;
                     player.main.health--; 
@@ -113,15 +113,17 @@ bulletHeck.main = {
     // AABB layout:
     //   x, y, width, height
     //   where (x, y) is the UPPER LEFT corner of the AABB
+    // AABB1 = {x1, y1, width1, height1}
+    // AABB2 = {x2, y2, width2, height2}
     // returns TRUE if the two AABBs are colliding and false otherwise
-    AABBCollision : function(AABB1, AABB2) {
-        if (AABB1.x < AABB2.x + AABB2.width &&
-            AABB1.x + AABB1.width > AABB2.x &&
-            AABB1.y < AABB2.y + AABB2.height &&
-            AABB1.y + AABB1.height > AABB2.y) {
-            // collision
-            return true;
+    AABBCollision : function(x1, y1, width1, height1, x2, y2, width2, height2) {
+        if (x1 > x2 + width2 || /* if AABB1 is to the right of AABB2 */
+            x1 + width1 < x2 || /* or AABB1 is to the left of AABB2 */
+            y1 > y2 + height2 || /* or AABB1 is below AABB2 */
+            y1 + height2 < y2 /* or AABB1 is above AABB2 */) {
+            // then there's no collision
+            return false;
         }
-        return false;
+        return true;
     }
 };
