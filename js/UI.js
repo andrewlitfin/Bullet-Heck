@@ -26,6 +26,8 @@ UI.main = {
     
     //keyboard inputs
     keyP: undefined,
+    keyEsc: undefined,
+    keyEnter: undefined,
     
     GAME_STATE: Object.freeze({ //fake enumeration for game state
         MAIN_MENU: 0,
@@ -54,6 +56,8 @@ UI.main = {
         
         //establish keys
         this.keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
+        this.keyEsc = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        this.keyEnter = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     },
     
     create: function(){        
@@ -99,19 +103,19 @@ UI.main = {
         for (var i = 0; i < this.buttonsToDrawArray.length; i++){
             switch (this.buttonsToDrawArray[i]){
                 case 0: //this.UI_BUTTON_TYPE.PLAY_BUTTON:
-                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'playButton', this.playGame, this, 2,1,0);
+                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'playButton', function(){this.buttonPressed('playButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 1: //this.UI_BUTTON_TYPE.UNPAUSE_BUTTON:
-                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'unpauseButton', this.unpause, this, 2,1,0);
+                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'unpauseButton', function(){this.buttonPressed('unpauseButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 2: //this.UI_BUTTON_TYPE.MAIN_MENU_BUTTON:
-                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'mainMenuButton', this.toMainMenu, this, 2,1,0);
+                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'mainMenuButton', function(){this.buttonPressed('mainMenuButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 3: //this.UI_BUTTON_TYPE.NEXT_LEVEL_BUTTON:
-                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'nextLevelButton', this.nextLevel, this, 2,1,0);
+                    var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'nextLevelButton', function(){this.buttonPressed('nextLevelButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 default:
@@ -120,8 +124,12 @@ UI.main = {
             }
         } 
         
-        //Add a listener for the pause button (P)
+        //Add a listener for the pause buttons (P or Esc)
         this.keyP.onDown.add(this.pauseToggle, this, 0);
+        this.keyEsc.onDown.add(this.pauseToggle, this, 0);
+        
+        //Add a listener for the default select button (Enter)
+        this.keyEnter.onDown.add(this.defaultSelect, this, 0);
     },
     
     update: function(){
@@ -138,6 +146,9 @@ UI.main = {
             this.gameState == this.GAME_STATE.GAME_OVER){
             switch (player.main.health){
                 case 3:
+                    if(this.heart1) this.heart1.kill();
+                    if(this.heart2) this.heart2.kill();
+                    if(this.heart3) this.heart3.kill();
                     this.heart1 = game.add.sprite(10, 10, 'fullHeart');
                     this.heart2 = game.add.sprite(50, 10, 'fullHeart');
                     this.heart3 = game.add.sprite(90, 10, 'fullHeart');
@@ -146,6 +157,9 @@ UI.main = {
                     this.heart3.scale.set(2.5,2.5);
                     break;
                 case 2:
+                    if(this.heart1) this.heart1.kill();
+                    if(this.heart2) this.heart2.kill();
+                    if(this.heart3) this.heart3.kill();
                     this.heart1 = game.add.sprite(10, 10, 'fullHeart');
                     this.heart2 = game.add.sprite(50, 10, 'fullHeart');
                     this.heart3 = game.add.sprite(90, 10, 'emptyHeart');
@@ -154,6 +168,9 @@ UI.main = {
                     this.heart3.scale.set(2.5,2.5);
                     break;
                 case 1:
+                    if(this.heart1) this.heart1.kill();
+                    if(this.heart2) this.heart2.kill();
+                    if(this.heart3) this.heart3.kill();
                     this.heart1 = game.add.sprite(10, 10, 'fullHeart');
                     this.heart2 = game.add.sprite(50, 10, 'emptyHeart');
                     this.heart3 = game.add.sprite(90, 10, 'emptyHeart');
@@ -162,6 +179,9 @@ UI.main = {
                     this.heart3.scale.set(2.5,2.5);
                     break;
                 default:
+                    if(this.heart1) this.heart1.kill();
+                    if(this.heart2) this.heart2.kill();
+                    if(this.heart3) this.heart3.kill();
                     this.heart1 = game.add.sprite(10, 10, 'emptyHeart');
                     this.heart2 = game.add.sprite(50, 10, 'emptyHeart');
                     this.heart3 = game.add.sprite(90, 10, 'emptyHeart');
@@ -174,100 +194,101 @@ UI.main = {
                 
     },
     
-    //Begin playing the game from the main menu
-    playGame: function() {
-        //update the gamestate
-        this.gameState = this.GAME_STATE.IN_LEVEL;
-        //destroy all the buttons
-        for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-            this.buttonsToDestroyArray[i].destroy();
+    //A function which handles all UI button presses with a switch statement
+    buttonPressed: function(buttonKey) {
+        console.log("Button Key: " + buttonKey);
+        console.log("Pressed a Button");
+        switch (buttonKey){
+            case "playButton":
+                //update the gamestate
+                this.gameState = this.GAME_STATE.IN_LEVEL;
+                //destroy all the buttons
+                for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
+                    this.buttonsToDestroyArray[i].destroy();
+                }
+                this.buttonsToDestroyArray = [];
+                this.buttonsToDrawArray = [];
+                //reset the score
+                this.score = 0;
+                this.instructionsText.destroy();
+                //rebuild the UI for the current gamestate
+                this.create();
+
+                //reset the player health
+                player.main.health = player.main.STARTING_HEALTH;
+                //create the player objects
+                player.main.create();
+
+                //reset the level count
+                enemies.main.level = enemies.main.startingLevel;
+                //create the enemy objects
+                enemies.main.create();
+                break;
+            case "unpauseButton":
+                //update the gamestate
+                this.gameState = this.GAME_STATE.IN_LEVEL;
+                //destroy all the buttons
+                for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
+                    this.buttonsToDestroyArray[i].destroy();
+                }
+                this.buttonsToDestroyArray = [];
+                this.buttonsToDrawArray = [];
+                //rebuild the UI for the current gamestate
+                this.create();
+                break;
+            case "mainMenuButton":
+                //update the gamestate
+                this.gameState = this.GAME_STATE.MAIN_MENU;
+                //destroy all the buttons
+                for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
+                    this.buttonsToDestroyArray[i].destroy();
+                }
+                this.buttonsToDestroyArray = [];
+                this.buttonsToDrawArray = [];
+                //rebuild the UI for the current gamestate
+                this.create();
+                break;
+            case "nextLevelButton":
+                //update the gamestate
+                this.gameState = this.GAME_STATE.IN_LEVEL;
+                //destroy all the buttons
+                for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
+                    this.buttonsToDestroyArray[i].destroy();
+                }
+                this.buttonsToDestroyArray = [];
+                this.buttonsToDrawArray = [];
+                //rebuild the UI for the current gamestate
+                this.create(); 
+                player.main.create();
+                enemies.main.create();
+                break;
+            default:
+                console.log("Button Key Incorrect");
+                break;
         }
-        this.buttonsToDestroyArray = [];
-        this.buttonsToDrawArray = [];
-        //reset the score
-        this.score = 0;
-        this.instructionsText.destroy();
-        //rebuild the UI for the current gamestate
-        this.create();
-        
-        //reset the player health
-        player.main.health = player.main.STARTING_HEALTH;
-        //create the player objects
-        player.main.create();
-        
-        //reset the level count
-        enemies.main.level = enemies.main.startingLevel;
-        //create the enemy objects
-        enemies.main.create();
-    },
-    
-    //Pause the game from in a level
-    pause: function(){
-        //update the gamestate
-        this.gameState = this.GAME_STATE.PAUSE;
-        //rebuild the UI for the current gamestate
-        this.create();
-    },
-    
-    //Unpause the game from the pause menu
-    unpause: function(){
-        //update the gamestate
-        this.gameState = this.GAME_STATE.IN_LEVEL;
-        //destroy all the buttons
-        for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-            this.buttonsToDestroyArray[i].destroy();
-        }
-        this.buttonsToDestroyArray = [];
-        this.buttonsToDrawArray = [];
-        //rebuild the UI for the current gamestate
-        this.create();
-    },
-    
-    //Return to the main menu from the pause menu
-    toMainMenu: function(){
-        //update the gamestate
-        this.gameState = this.GAME_STATE.MAIN_MENU;
-        //destroy all the buttons
-        for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-            this.buttonsToDestroyArray[i].destroy();
-        }
-        this.buttonsToDestroyArray = [];
-        this.buttonsToDrawArray = [];
-        //rebuild the UI for the current gamestate
-        this.create();
-    },
-    
-    //Move to the next level once you have completed a level
-    nextLevel: function(){
-        //update the gamestate
-        this.gameState = this.GAME_STATE.IN_LEVEL;
-        //destroy all the buttons
-        for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-            this.buttonsToDestroyArray[i].destroy();
-        }
-        this.buttonsToDestroyArray = [];
-        this.buttonsToDrawArray = [];
-        //rebuild the UI for the current gamestate
-        this.create(); 
-        player.main.create();
-        enemies.main.create();
-    },
-    
+    },   
         
     //Toggle the game state for purposes of pausing and unpausing
     pauseToggle: function() {
         //if the game is paused
         if (this.gameState == this.GAME_STATE.PAUSE){
             //unpause it
-            this.unpause();
+            this.buttonPressed('unpauseButton');
             return;
         }
         //if the game is not paused
         if(this.gameState == this.GAME_STATE.IN_LEVEL){
-            //pause it
-            this.pause();
-            return;
+            //update the gamestate
+            this.gameState = this.GAME_STATE.PAUSE;
+            //rebuild the UI for the current gamestate
+            this.create();
         }
         
+    },
+    
+    //This function is called when the enter key is pressed. 
+    //Call the function tied to the first button on the screen.
+    defaultSelect: function() {
+        if(this.buttonsToDestroyArray[0]) this.buttonPressed(this.buttonsToDestroyArray[0].key);    
     },
 }
