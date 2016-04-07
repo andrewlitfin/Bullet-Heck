@@ -136,7 +136,7 @@ UI.main = {
         //print the game score to the top right
         var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
         
-        if(this.scoreText != null) this.scoreText.destroy();
+        if(this.scoreText != null) this.scoreText.kil();
         this.scoreText = game.add.text(game.width - 20, 10, "Score: " + this.score, style);
         this.scoreText.x -= this.scoreText.width;
         //put hearts in the top left if you are in a game state where they are relevant
@@ -204,13 +204,13 @@ UI.main = {
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
                 for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-                    this.buttonsToDestroyArray[i].destroy();
+                    this.buttonsToDestroyArray[i].kill();
                 }
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
                 //reset the score
                 this.score = 0;
-                this.instructionsText.destroy();
+                this.instructionsText.kill();
                 //rebuild the UI for the current gamestate
                 this.create();
 
@@ -229,7 +229,7 @@ UI.main = {
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
                 for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-                    this.buttonsToDestroyArray[i].destroy();
+                    this.buttonsToDestroyArray[i].kill();
                 }
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
@@ -241,7 +241,7 @@ UI.main = {
                 this.gameState = this.GAME_STATE.MAIN_MENU;
                 //destroy all the buttons
                 for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-                    this.buttonsToDestroyArray[i].destroy();
+                    this.buttonsToDestroyArray[i].kill();
                 }
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
@@ -253,7 +253,7 @@ UI.main = {
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
                 for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
-                    this.buttonsToDestroyArray[i].destroy();
+                    this.buttonsToDestroyArray[i].kill();
                 }
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
