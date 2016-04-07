@@ -117,11 +117,18 @@ UI.main = {
         } 
         
         //Add a listener for the pause buttons (P or Esc)
-        this.keyP.onDown.add(this.pauseToggle, this, 0);
-        this.keyEsc.onDown.add(this.pauseToggle, this, 0);
+        if (this.gameState == this.GAME_STATE.PAUSE){
+            this.keyP.onDown.addOnce(function(){this.buttonPressed('unpauseButton')}, this, 0);
+            this.keyEsc.onDown.addOnce(function(){this.buttonPressed('unpauseButton')}, this, 0);
+        }
+        
+        else if (this.gameState == this.GAME_STATE.IN_LEVEL){
+            this.keyP.onDown.addOnce(function(){this.buttonPressed('pauseButton')}, this, 0);
+            this.keyEsc.onDown.addOnce(function(){this.buttonPressed('pauseButton')}, this, 0);
+        }
         
         //Add a listener for the default select button (Enter)
-        this.keyEnter.onDown.add(this.defaultSelect, this, 0);
+        this.keyEnter.onDown.addOnce(this.defaultSelect, this, 0);
     },
     
     update: function(){
@@ -214,7 +221,17 @@ UI.main = {
                 //create the enemy objects
                 enemies.main.create();
                 break;
+            case "pauseButton":
+                //update the gamestate
+                this.gameState = this.GAME_STATE.PAUSE;
+                //disable physics
+                player.main.bullets.setAll("body.enable", false);
+                //rebuild the UI for the current gamestate
+                this.create();
+                break;
             case "unpauseButton":
+                //re enable physics
+                player.main.bullets.setAll("body.enable", true);
                 //update the gamestate
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
@@ -257,28 +274,6 @@ UI.main = {
                 break;
         }
     },   
-        
-    //Toggle the game state for purposes of pausing and unpausing
-    pauseToggle: function() {
-        //if the game is paused
-        if (this.gameState == this.GAME_STATE.PAUSE){
-            //enable physics
-            player.main.bullets.setAll("body.enable", true);
-            //unpause it
-            this.buttonPressed('unpauseButton');
-            return;
-        }
-        //if the game is not paused
-        if(this.gameState == this.GAME_STATE.IN_LEVEL){
-            //update the gamestate
-            this.gameState = this.GAME_STATE.PAUSE;
-            //disable physics
-            player.main.bullets.setAll("body.enable", false);
-            //rebuild the UI for the current gamestate
-            this.create();
-        }
-        
-    },
     
     //This function is called when the enter key is pressed. 
     //Call the function tied to the first button on the screen.
