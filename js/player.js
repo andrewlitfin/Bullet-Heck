@@ -20,7 +20,7 @@ player.main = {
     //          bulletVel: the velocity of the bullet,
     //      },
     bullets: undefined,
-    bulletSpeed: 800, //the speed of our bullets
+    bulletSpeed: 600, //the speed of our bullets
     bulletTime: 0, // a way to space out the firing of bullets
     bulletTimeDelay: 60, // delay between bullets firing (ms)
     
@@ -54,6 +54,8 @@ player.main = {
         this.bullets.createMultiple(150, 'bullet');
         this.bullets.setAll('anchor.x', 0.5);
         this.bullets.setAll('anchor.y', 0.5);
+        this.bullets.setAll('outOfBoundsKill', true);
+        this.bullets.setAll('checkWorldBounds', true);
         
         //create the first player object and center it on the screen
         if (this.playerObj1) this.playerObj1.destroy();
@@ -71,7 +73,7 @@ player.main = {
     },
         
     update : function(){
-        console.log("NumBullets: " + this.bullets.length);
+        console.log("NumBullets: " + this.bullets.countLiving());
         //if the player is dead
         if (this.health <= 0){
             return;
@@ -139,8 +141,6 @@ player.main = {
                     {
                         // reset the bullet to be "alive" at the new position
                         bullet1.reset(this.playerObj1.x, this.playerObj1.y);
-                        // set the lifespan (in ms)
-                        bullet1.lifespan = 1500;
                        
                        // give the bullet the appropriate velocity, based on playerobject rotation and bulletSpeed
                         game.physics.arcade.velocityFromRotation(this.playerObj1.rotation - Math.PI/2, this.bulletSpeed, bullet1.body.velocity);
@@ -152,7 +152,6 @@ player.main = {
                 if (bullet2)
                     {
                         bullet2.reset(this.playerObj2.x, this.playerObj2.y);
-                        bullet2.lifespan = 1500;
                         game.physics.arcade.velocityFromRotation(this.playerObj2.rotation - Math.PI/2, this.bulletSpeed, bullet2.body.velocity);
                         
                         this.bulletTime = game.time.now + this.bulletTimeDelay
