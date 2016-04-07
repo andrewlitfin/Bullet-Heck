@@ -261,8 +261,12 @@ UI.main = {
                 }
                 enemies.main.enemyObjs = [];
                 
-                //delete the bullets off the screen
+                //delete the bullets
                 player.main.bullets.destroy();
+                
+                //delete the player objects
+                player.main.playerObj1.kill();
+                player.main.playerObj2.kill();
                 
                 //rebuild the UI for the current gamestate
                 this.create();
