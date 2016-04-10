@@ -9,8 +9,11 @@ enemies.main = {
     // level variable
     level: 1,
     startingLevel: 1,
-    // master list of active enemies
-    enemyObjs: [],
+    // list of active enemies of a given type
+    type1EnemyObjs: undefined,
+    type2EnemyObjs: undefined,
+    type3EnemyObjs: undefined,
+    
     // enemy type "enum"
     enemyType: Object.freeze({
         TYPE1: 0,
@@ -18,6 +21,7 @@ enemies.main = {
         TYPE3: 2,
         BOSS : 16
     }),
+    alreadyCreated: false,
         
     preload : function () {
         game.load.image('enemy1', 'assets/Enemies/ship (1).png');
@@ -27,15 +31,26 @@ enemies.main = {
     },
     
     create : function () {
-        // depopulate enemyobjs just in case
-        for (var i = 0; i < this.enemyObjs.length; i++)
-            if (this.enemyObjs[i])
-                this.enemyObjs[i].sprite.destroy();
-        // then populate the enemy objs
-        this.enemyObjs = [];
-        for(var i = 0; i <= this.level; i++){
+        if (!this.alreadyCreated) {
+            this.alreadyCreated = true;
+            
+            // create the three groups of primary enemy types
+            this.type1EnemyObjs = game.add.group();
+            this.type1EnemyObjs.enableBody = true;
+            this.type1EnemyObjs.physicsBodyType = Phaser.Physics.ARCADE;
+            
+            this.type2EnemyObjs = game.add.group();
+            this.type2EnemyObjs.enableBody = true;
+            this.type2EnemyObjs.physicsBodyType = Phaser.Physics.ARCADE;
+            
+            this.type3EnemyObjs = game.add.group();
+            this.type3EnemyObjs.enableBody = true;
+            this.type3EnemyObjs.physicsBodyType = Phaser.Physics.ARCADE;
+        }
+        
+        for (var i = 0; i <= this.level; i++) {
             var enemySelect = (Math.ceil((Math.random()*3)%3));
-            switch (enemySelect){
+            switch (enemySelect) {
                 case 1:
                     this.addEnemy(this.enemyType.TYPE1);
                     break;
@@ -50,21 +65,15 @@ enemies.main = {
     },
     
     update : function () {
-        // note to future self:
-        // enemies are added with enemyObjs.push([enemy object])
-        // and removed with enemyObjs.splice([index], 1)
-        // (index arg is going to be stored in toDelete)
-        // (second arg is # of enemies to delete)
-        var toDelete = [];
-        for (var i = 0; i < this.enemyObjs.length; i++) {
-            var eo = this.enemyObjs[i];
-            eo.update();
-            if (!eo.isAlive()){
-                this.enemyObjs[i].sprite.destroy();
-                this.enemyObjs.splice(i, 1);
-                i--;
-            }
-        }
+        this.type1EnemyObjs.forEachAlive(function(eo) {
+            eo.x += 1;
+        }, this);
+        this.type2EnemyObjs.forEachAlive(function(eo) {
+            eo.x -= 1;
+        }, this);
+        this.type3EnemyObjs.forEachAlive(function(eo) {
+            eo.y += 1;
+        }, this);
     },
     
     //a function which adds an enemy based on the enemy type we pass it
@@ -72,6 +81,11 @@ enemies.main = {
         var eo; //a variable to track the enemy obj we are creating
         switch(_enemyType){
             case this.enemyType.TYPE1: //generate an enemy of type 1
+                eo = this.type1EnemyObjs.create(0, (Math.random()*400)%400 + game.height/7, 'enemy1');
+                eo.scale.set(0.25, 0.25);
+                eo.anchor.set(0.5);
+                eo.health = 100; // this value will have to be changed over time
+/*
                 eo = {
                     sprite: game.add.sprite(0, (Math.random()*400)%400 + game.height/7, 'enemy1'),
                     health: 60,
@@ -89,8 +103,14 @@ enemies.main = {
                 //rescale the sprite
                 eo.sprite.scale.set(0.25, 0.25);
                 eo.sprite.x -= eo.sprite.width + 1;
+*/
                 break;
             case this.enemyType.TYPE2: //generate an enemy of type 2
+                eo = this.type2EnemyObjs.create(game.width, (Math.random()*400)%400 + game.height / 7, 'enemy2');
+                eo.scale.set(0.25, 0.25);
+                eo.anchor.set(0.5, 0.5);
+                eo.health = 100;
+/*
                 eo = {
                     sprite: game.add.sprite(game.width, (Math.random()*400)%400 + game.height/7, 'enemy2'),
                     health: 60,
@@ -107,8 +127,14 @@ enemies.main = {
                 }
                 //rescale the sprite
                 eo.sprite.scale.set(0.25, 0.25);
+*/
                 break;
             case this.enemyType.TYPE3: //generate an enemy of type 3
+                eo = this.type3EnemyObjs.create((Math.random()*300)%300 + game.width/4, 0, 'enemy3');
+                eo.scale.set(0.25, 0.25);
+                eo.anchor.set(0.5, 0.5);
+                eo.health = 100;
+/*
                 eo = {
                     sprite: game.add.sprite((Math.random()*300)%300 + game.width/4, 0, 'enemy3'),
                     health: 60,
@@ -127,12 +153,14 @@ enemies.main = {
                 eo.sprite.scale.set(0.25, 0.25);
                 eo.sprite.x -= eo.sprite.width/2;
                 eo.sprite.y -= eo.sprite.height + 1;
+*/
                 break;
             case this.enemyType.BOSS: //generate an enemy of type 'BOSS'
             default:
                 break;
         }
         //method to check if the enemy has either run out of health or left the screen
+/*
         eo.isAlive = function(){
             //if the enemy is out of health
             if (this.health <= 0){
@@ -154,5 +182,6 @@ enemies.main = {
         }
         //push the generated enemy onto the array of enemies
         this.enemyObjs.push(eo);
+*/
     }
 };

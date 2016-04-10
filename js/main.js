@@ -77,6 +77,7 @@ bulletHeck.main = {
             //TODO
             
             //Enemy on Player
+/*
             for (var i = 0; i < enemies.main.enemyObjs.length; i++){
                 var playerSprite1 = player.main.playerObj1;
                 var playerSprite2 = player.main.playerObj2;
@@ -106,6 +107,7 @@ bulletHeck.main = {
                     player.main.health--; 
                 }
             }
+*/
             
             //If the player is dead, move to game over state
             if (player.main.health <= 0){
@@ -113,12 +115,14 @@ bulletHeck.main = {
                 UI.main.create();
             }
             
+/*
             //If there are no more enemies, move to level complete state
             if(enemies.main.enemyObjs.length <= 0){
                 UI.main.gameState = UI.main.GAME_STATE.LEVEL_COMPLETE;
                 UI.main.create();
                 enemies.main.level++;
             }
+*/
         }
     },
 
