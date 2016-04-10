@@ -24,11 +24,6 @@ UI.main = {
     
     gameState: undefined,
     
-    //keyboard inputs
-    keyP: undefined,
-    keyEsc: undefined,
-    keyEnter: undefined,
-    
     GAME_STATE: Object.freeze({ //fake enumeration for game state
         MAIN_MENU: 0,
         IN_LEVEL: 1,
@@ -50,11 +45,6 @@ UI.main = {
         game.load.spritesheet('mainMenuButton', 'assets/UI/mainMenuButton.png', 96, 32);
         game.load.spritesheet('replayLevelButton', 'assets/UI/replayLevelButton.png', 96, 32);
         game.load.spritesheet('unpauseButton', 'assets/UI/unpauseButton.png', 96, 32);
-        
-        //establish keys
-        this.keyP = game.input.keyboard.addKey(Phaser.Keyboard.P);
-        this.keyEsc = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
-        this.keyEnter = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     },
     
     create: function(){
@@ -121,18 +111,21 @@ UI.main = {
             }
         } 
         
-        //Add a listener for the pause buttons (P or Esc)
-        if (this.gameState == this.GAME_STATE.PAUSE){
-            this.keyP.onDown.addOnce(function(){this.buttonPressed('unpauseButton')}, this, 0);
-            this.keyEsc.onDown.addOnce(function(){this.buttonPressed('unpauseButton')}, this, 0);
-        }
-        else if (this.gameState == this.GAME_STATE.IN_LEVEL){
-            this.keyP.onDown.addOnce(function(){this.buttonPressed('pauseButton')}, this, 0);
-            this.keyEsc.onDown.addOnce(function(){this.buttonPressed('pauseButton')}, this, 0);
-        }
-        
-        //Add a listener for the default select button (Enter)
-        this.keyEnter.onDown.addOnce(this.defaultSelect, this, 0);
+        //create a listener for keyboard input
+        game.input.keyboard.onDownCallback = function( e ){
+            //listens to P or ESC to unpause the game
+            if(UI.main.gameState == UI.main.GAME_STATE.PAUSE && (e.keyCode == Phaser.Keyboard.P || e.keyCode == Phaser.Keyboard.ESC)){
+                UI.main.buttonPressed('unpauseButton');
+            }
+            //listens to P or ESC to pause the game
+            else if(UI.main.gameState == UI.main.GAME_STATE.IN_LEVEL && (e.keyCode == Phaser.Keyboard.P || e.keyCode == Phaser.Keyboard.ESC)){
+                UI.main.buttonPressed('pauseButton');
+            }
+            //listens for ENTER to select the first option in the array of UI buttons
+            if (e.keyCode == Phaser.Keyboard.ENTER){
+                UI.main.defaultSelect();
+            }
+        };
     },
     
     update: function(){
@@ -233,6 +226,12 @@ UI.main = {
                 this.gameState = this.GAME_STATE.PAUSE;
                 //disable physics
                 player.main.bullets.setAll("body.enable", false);
+                //destroy all the buttons
+                for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
+                    this.buttonsToDestroyArray[i].kill();
+                }
+                this.buttonsToDestroyArray = [];
+                this.buttonsToDrawArray = [];
                 //rebuild the UI for the current gamestate
                 this.create();
                 break;
