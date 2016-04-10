@@ -96,23 +96,27 @@ UI.main = {
         for (var i = 0; i < this.buttonsToDrawArray.length; i++){
             switch (this.buttonsToDrawArray[i]){
                 case 0: //this.UI_BUTTON_TYPE.PLAY_BUTTON:
+                    console.log("Created Play Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'playButton', function(){this.buttonPressed('playButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 1: //this.UI_BUTTON_TYPE.UNPAUSE_BUTTON:
+                    console.log("Created Unpause Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'unpauseButton', function(){this.buttonPressed('unpauseButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 2: //this.UI_BUTTON_TYPE.MAIN_MENU_BUTTON:
+                    console.log("Created Main Menu Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'mainMenuButton', function(){this.buttonPressed('mainMenuButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 3: //this.UI_BUTTON_TYPE.NEXT_LEVEL_BUTTON:
+                    console.log("Created Next Level Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'nextLevelButton', function(){this.buttonPressed('nextLevelButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 default:
-                    console.log("No Button");
+                    console.log("Created No Button");
                     break;
             }
         } 
@@ -197,6 +201,7 @@ UI.main = {
     buttonPressed: function(buttonKey) {
         switch (buttonKey){
             case "playButton":
+                console.log("Pressed Play Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
@@ -223,6 +228,7 @@ UI.main = {
                 enemies.main.create();
                 break;
             case "pauseButton":
+                console.log("Pressed Pause Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.PAUSE;
                 //disable physics
@@ -231,6 +237,7 @@ UI.main = {
                 this.create();
                 break;
             case "unpauseButton":
+                console.log("Pressed Unpause Button");
                 //re enable physics
                 player.main.bullets.setAll("body.enable", true);
                 //update the gamestate
@@ -245,6 +252,7 @@ UI.main = {
                 this.create();
                 break;
             case "mainMenuButton":
+                console.log("Pressed Main Menu Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.MAIN_MENU;
                 
@@ -272,6 +280,7 @@ UI.main = {
                 this.create();
                 break;
             case "nextLevelButton":
+                console.log("Pressed Next Level Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
@@ -286,7 +295,7 @@ UI.main = {
                 enemies.main.create();
                 break;
             default:
-                console.log("Button Key Incorrect");
+                console.log("Pressed No Button");
                 break;
         }
     },   

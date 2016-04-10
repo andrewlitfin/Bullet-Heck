@@ -50,7 +50,6 @@ enemies.main = {
     },
     
     update : function () {
-        console.log("Num Enemies: " + this.enemyObjs.length);
         // note to future self:
         // enemies are added with enemyObjs.push([enemy object])
         // and removed with enemyObjs.splice([index], 1)
