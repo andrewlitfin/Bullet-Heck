@@ -39,7 +39,7 @@ bulletHeck.main = {
     //update function for calling via phaser
     update : function() {
         //update background
-        this.background.tilePosition.y += 1.1;
+        this.background.tilePosition.y += 1;
         
         //update UI
         UI.main.update();
@@ -73,10 +73,13 @@ bulletHeck.main = {
             }
             
             //If there are no more enemies, move to level complete state
-            var countEnemiesAlive = 0;
+            var countEnemiesAlive = enemies.main.type1EnemyObjs.countLiving() + enemies.main.type2EnemyObjs.countLiving() + enemies
+            .main.type3EnemyObjs.countLiving();
+/*
             enemies.main.type1EnemyObjs.forEachAlive(function(eo) {countEnemiesAlive++;}, enemies.main);
             enemies.main.type2EnemyObjs.forEachAlive(function(eo) {countEnemiesAlive++;}, enemies.main);
             enemies.main.type3EnemyObjs.forEachAlive(function(eo) {countEnemiesAlive++;}, enemies.main);
+*/
             
             if(countEnemiesAlive <= 0){
                 UI.main.gameState = UI.main.GAME_STATE.LEVEL_COMPLETE;
@@ -84,6 +87,8 @@ bulletHeck.main = {
                 enemies.main.level++;
                 return;
             }
+        }
+    },
     
     //Handle Collisions between bullets and enemies
     bulletToEnemyCollision: function(bullet, enemyObj){
