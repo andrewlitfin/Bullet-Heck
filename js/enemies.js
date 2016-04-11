@@ -85,79 +85,18 @@ enemies.main = {
                 eo.scale.set(0.25, 0.25);
                 eo.anchor.set(0.5);
                 eo.health = 25; // this value will have to be changed over time
-                eo.speed = 2;
-                
-/*
-                eo = {
-                    sprite: game.add.sprite(0, (Math.random()*400)%400 + game.height/7, 'enemy1'),
-                    health: 60,
-                    enemyType: _enemyType,
-                    speed: 2,
-                    onscreen: false,
-                    update: function(){
-                        eo.sprite.x += eo.speed;
-                        if(eo.sprite.x > game.width/2) eo.onscreen = true;
-                        if(eo.onscreen){
-                            if (eo.hitScreenEdge()) eo.speed *= -1; 
-                        }
-                    }
-                }
-                //rescale the sprite
-                eo.sprite.scale.set(0.25, 0.25);
-                eo.sprite.x -= eo.sprite.width + 1;
-*/
                 break;
             case this.enemyType.TYPE2: //generate an enemy of type 2
                 eo = this.type2EnemyObjs.create(game.width, (Math.random()*400)%400 + game.height / 7, 'enemy2');
                 eo.scale.set(0.25, 0.25);
                 eo.anchor.set(0.5, 0.5);
                 eo.health = 25;
-                eo.speed = 2;
-/*
-                eo = {
-                    sprite: game.add.sprite(game.width, (Math.random()*400)%400 + game.height/7, 'enemy2'),
-                    health: 60,
-                    enemyType: _enemyType,
-                    speed: 2,
-                    onscreen: false,
-                    update: function(){
-                        eo.sprite.x -= eo.speed;
-                        if(eo.sprite.x < game.width/2) eo.onscreen = true;
-                        if(eo.onscreen){
-                            if (eo.hitScreenEdge()) eo.speed *= -1; 
-                        }
-                    }
-                }
-                //rescale the sprite
-                eo.sprite.scale.set(0.25, 0.25);
-*/
                 break;
             case this.enemyType.TYPE3: //generate an enemy of type 3
                 eo = this.type3EnemyObjs.create((Math.random()*300)%300 + game.width/4, 0, 'enemy3');
                 eo.scale.set(0.25, 0.25);
                 eo.anchor.set(0.5, 0.5);
                 eo.health = 25;
-                eo.speed = 2;
-/*
-                eo = {
-                    sprite: game.add.sprite((Math.random()*300)%300 + game.width/4, 0, 'enemy3'),
-                    health: 60,
-                    enemyType: _enemyType,
-                    speed: 2,
-                    onscreen: false,
-                    update: function(){
-                        eo.sprite.y += eo.speed;
-                        if(eo.sprite.y > game.height/2) eo.onscreen = true;
-                        if(eo.onscreen){
-                            if (eo.hitScreenEdge()) eo.speed *= -1; 
-                        }
-                    }
-                }
-                //rescale the sprite
-                eo.sprite.scale.set(0.25, 0.25);
-                eo.sprite.x -= eo.sprite.width/2;
-                eo.sprite.y -= eo.sprite.height + 1;
-*/
                 break;
             case this.enemyType.BOSS: //generate an enemy of type 'BOSS'
             default:
@@ -175,18 +114,5 @@ enemies.main = {
             //otherwise
             return true;
         }
-/*
-        eo.hitScreenEdge = function(){
-            if (this.sprite.x < 0||//left
-                this.sprite.x + this.sprite.width > 0+game.width||//right
-                this.sprite.y < 0||//top
-                this.sprite.y + this.sprite.height > 0+game.height){//bottom
-                    return true;
-            }
-            return false;
-        }
-        //push the generated enemy onto the array of enemies
-        this.enemyObjs.push(eo);
-*/
     },
 };
