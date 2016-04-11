@@ -53,6 +53,9 @@ bulletHeck.main = {
             
             //CHECK FOR COLLISONS//
             //Player Bullet on Enemy
+            game.physics.arcade.overlap(player.main.bullets, enemies.main.type1EnemyObjs, this.bulletToEnemyCollision);
+            game.physics.arcade.overlap(player.main.bullets, enemies.main.type2EnemyObjs, this.bulletToEnemyCollision);
+            game.physics.arcade.overlap(player.main.bullets, enemies.main.type3EnemyObjs, this.bulletToEnemyCollision);
 /*
             for (var i = 0; i < player.main.bullets.length; i++){
                 for (var j = 0; j < enemies.main.enemyObjs.length; j++){
@@ -72,11 +75,15 @@ bulletHeck.main = {
                 }
             }
 */
-            
-            //Enemy Bullet on Player
-            //TODO
+
             
             //Enemy on Player
+            game.physics.arcade.overlap(player.main.playerObj1, enemies.main.type1EnemyObjs, this.playerToEnemyCollision);
+            game.physics.arcade.overlap(player.main.playerObj1, enemies.main.type2EnemyObjs, this.playerToEnemyCollision);
+            game.physics.arcade.overlap(player.main.playerObj1, enemies.main.type3EnemyObjs, this.playerToEnemyCollision);
+            game.physics.arcade.overlap(player.main.playerObj2, enemies.main.type1EnemyObjs, this.playerToEnemyCollision);
+            game.physics.arcade.overlap(player.main.playerObj2, enemies.main.type2EnemyObjs, this.playerToEnemyCollision);
+            game.physics.arcade.overlap(player.main.playerObj2, enemies.main.type3EnemyObjs, this.playerToEnemyCollision);
 /*
             for (var i = 0; i < enemies.main.enemyObjs.length; i++){
                 var playerSprite1 = player.main.playerObj1;
@@ -113,10 +120,29 @@ bulletHeck.main = {
             if (player.main.health <= 0){
                 UI.main.gameState = UI.main.GAME_STATE.GAME_OVER;
                 UI.main.create();
+                return;
             }
             
-/*
+
             //If there are no more enemies, move to level complete state
+            var countEnemiesAlive = 0;
+            enemies.main.type1EnemyObjs.forEachAlive(function(eo) {
+                countEnemiesAlive++;            
+            }, enemies.main);
+            enemies.main.type2EnemyObjs.forEachAlive(function(eo) {
+                countEnemiesAlive++; 
+            }, enemies.main);
+            enemies.main.type3EnemyObjs.forEachAlive(function(eo) {
+                countEnemiesAlive++; 
+            }, enemies.main);
+            
+            if(countEnemiesAlive <= 0){
+                UI.main.gameState = UI.main.GAME_STATE.LEVEL_COMPLETE;
+                UI.main.create();
+                enemies.main.level++;
+                return;
+            }
+/*
             if(enemies.main.enemyObjs.length <= 0){
                 UI.main.gameState = UI.main.GAME_STATE.LEVEL_COMPLETE;
                 UI.main.create();
@@ -142,5 +168,17 @@ bulletHeck.main = {
             return false;
         }
         return true;
-    }
+    },
+    
+    //Handle Collisions between bullets and enemies
+    bulletToEnemyCollision: function(bullet, enemyObj){
+        bullet.kill();
+        enemyObj.health--;
+    },
+    
+    //Handle Collisions between player and enemies
+    playerToEnemyCollision: function(playerObj, enemyObj){
+        player.main.health--;
+        enemyObj.health = 0;
+    },
 };

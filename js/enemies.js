@@ -66,13 +66,13 @@ enemies.main = {
     
     update : function () {
         this.type1EnemyObjs.forEachAlive(function(eo) {
-            eo.x += 1;
+            if (eo.isAlive()) game.physics.arcade.moveToXY(eo, (player.main.playerObj1.x + player.main.playerObj2.x )/2, (player.main.playerObj1.y + player.main.playerObj2.y )/2);
         }, this);
         this.type2EnemyObjs.forEachAlive(function(eo) {
-            eo.x -= 1;
+            if (eo.isAlive()) game.physics.arcade.moveToObject(eo, player.main.playerObj1);
         }, this);
         this.type3EnemyObjs.forEachAlive(function(eo) {
-            eo.y += 1;
+            if (eo.isAlive()) game.physics.arcade.moveToObject(eo, player.main.playerObj2);
         }, this);
     },
     
@@ -84,7 +84,9 @@ enemies.main = {
                 eo = this.type1EnemyObjs.create(0, (Math.random()*400)%400 + game.height/7, 'enemy1');
                 eo.scale.set(0.25, 0.25);
                 eo.anchor.set(0.5);
-                eo.health = 100; // this value will have to be changed over time
+                eo.health = 25; // this value will have to be changed over time
+                eo.speed = 2;
+                
 /*
                 eo = {
                     sprite: game.add.sprite(0, (Math.random()*400)%400 + game.height/7, 'enemy1'),
@@ -109,7 +111,8 @@ enemies.main = {
                 eo = this.type2EnemyObjs.create(game.width, (Math.random()*400)%400 + game.height / 7, 'enemy2');
                 eo.scale.set(0.25, 0.25);
                 eo.anchor.set(0.5, 0.5);
-                eo.health = 100;
+                eo.health = 25;
+                eo.speed = 2;
 /*
                 eo = {
                     sprite: game.add.sprite(game.width, (Math.random()*400)%400 + game.height/7, 'enemy2'),
@@ -133,7 +136,8 @@ enemies.main = {
                 eo = this.type3EnemyObjs.create((Math.random()*300)%300 + game.width/4, 0, 'enemy3');
                 eo.scale.set(0.25, 0.25);
                 eo.anchor.set(0.5, 0.5);
-                eo.health = 100;
+                eo.health = 25;
+                eo.speed = 2;
 /*
                 eo = {
                     sprite: game.add.sprite((Math.random()*300)%300 + game.width/4, 0, 'enemy3'),
@@ -160,10 +164,10 @@ enemies.main = {
                 break;
         }
         //method to check if the enemy has either run out of health or left the screen
-/*
         eo.isAlive = function(){
             //if the enemy is out of health
             if (this.health <= 0){
+                this.kill();
                 UI.main.score++;
                 return false;
             }
@@ -171,6 +175,7 @@ enemies.main = {
             //otherwise
             return true;
         }
+/*
         eo.hitScreenEdge = function(){
             if (this.sprite.x < 0||//left
                 this.sprite.x + this.sprite.width > 0+game.width||//right
@@ -183,5 +188,5 @@ enemies.main = {
         //push the generated enemy onto the array of enemies
         this.enemyObjs.push(eo);
 */
-    }
+    },
 };

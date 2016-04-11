@@ -63,6 +63,7 @@ player.main = {
         this.playerObj1.scale.set(0.2,0.2);
         this.playerObj1.anchor.set(0.5);
         this.playerObj1.y -= this.playerObj1.height + 20;
+        game.physics.arcade.enable(this.playerObj1);
         
         //create the second player object and center it on the screen
         if (this.playerObj2) this.playerObj2.destroy();
@@ -70,6 +71,7 @@ player.main = {
         this.playerObj2.scale.set(0.2,0.2);
         this.playerObj2.anchor.set(0.5);
         this.playerObj2.y -= this.playerObj2.height + 20;
+        game.physics.arcade.enable(this.playerObj2);
     },
         
     update : function(){

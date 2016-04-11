@@ -22,8 +22,14 @@ UI.main = {
     buttonsToDrawArray: [], //an array of ints which draws buttons based on the int
     buttonsToDestroyArray: [], //an array of all buttons that have been drawn
     
-    gameState: undefined,
+    //audio
+    gameplayLoop: undefined,
+    menuLoop: undefined,
+    gameplayMusic: undefined,
+    menuMusic: undefined,
     
+    //gamestate variables
+    gameState: undefined,
     GAME_STATE: Object.freeze({ //fake enumeration for game state
         MAIN_MENU: 0,
         IN_LEVEL: 1,
@@ -45,63 +51,93 @@ UI.main = {
         game.load.spritesheet('mainMenuButton', 'assets/UI/mainMenuButton.png', 96, 32);
         game.load.spritesheet('replayLevelButton', 'assets/UI/replayLevelButton.png', 96, 32);
         game.load.spritesheet('unpauseButton', 'assets/UI/unpauseButton.png', 96, 32);
+        
+        //audio
+        this.gameplayLoop = game.load.audio('gameplayLoop', 'assets/audio/gameplay_loop.mp3');
+        this.menuLoop = game.load.audio('menuLoop', 'assets/audio/menu_loop.mp3');
+        this.gameplayMusic = new Phaser.Sound(game, 'gameplayLoop', 0.01, true);
+        this.menuMusic = new Phaser.Sound(game, 'menuLoop', 0.01, true);
     },
     
     create: function(){
-        //establish MAIN_MENU UI
-        if(this.gameState == this.GAME_STATE.MAIN_MENU){
+        switch(this.gameState){
+            case this.GAME_STATE.MAIN_MENU: //establish MAIN_MENU UI
+                //pause other music
+                if (this.menuMusic){
+                    this.menuMusic.pause();
+                }
+                if (this.gameplayMusic){
+                    this.gameplayMusic.pause();
+                }
+                
+                //play new music
+                this.menuMusic.play();
+
+                //draw UI
+                this.buttonsToDrawArray.push(0);
+                
+                //Add instructions text
+                var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle", align: "center" };
+                this.instructionsText = game.add.text(game.width/2, 80, "Arrow Keys to Move\nSpace Bar to Fire\nPress Play to Begin", style);
+                this.instructionsText.x -= this.instructionsText.width/2;
+                
+                break;
+            case this.GAME_STATE.IN_LEVEL: //establish IN_LEVEL UI
+                //pause other music
+                if (this.menuMusic){
+                    this.menuMusic.pause();
+                }
+                if (this.gameplayMusic){
+                    this.gameplayMusic.pause();
+                }
+                
+                //play new music
+                this.gameplayMusic.play();
+                
+                break;
+            case this.GAME_STATE.PAUSE: //establish PAUSE UI
+                this.buttonsToDrawArray.push(1);
+                this.buttonsToDrawArray.push(2);
+                break;
+            case this.GAME_STATE.GAME_OVER: //establish GAME_OVER UI
+                this.buttonsToDrawArray.push(2);
             this.buttonsToDrawArray.push(0);
-            //Add instructions text
-            var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle", align: "center" };
-            
-            this.instructionsText = game.add.text(game.width/2, 80, "Arrow Keys to Move\nSpace Bar to Fire\nPress Play to Begin", style);
-            
-            this.instructionsText.x -= this.instructionsText.width/2;
-        }
-        
-        //establish IN_LEVEL UI
-        if(this.gameState == this.GAME_STATE.IN_LEVEL){
-            
-        }
-        
-        //establish PAUSE UI
-        if(this.gameState == this.GAME_STATE.PAUSE){
-            this.buttonsToDrawArray.push(1);
-            this.buttonsToDrawArray.push(2);
-        }
-        
-        //establish GAME_OVER UI
-        if(this.gameState == this.GAME_STATE.GAME_OVER){
-            this.buttonsToDrawArray.push(2);
-            this.buttonsToDrawArray.push(0);
-        }
-        
-        //establish LEVEL_COMPLETE UI
-        if(this.gameState == this.GAME_STATE.LEVEL_COMPLETE){
-            this.buttonsToDrawArray.push(3);
-            this.buttonsToDrawArray.push(2);
-        }
+                //destroy all the enemies
+                enemies.main.type1EnemyObjs.forEachAlive(function(eo) {
+                    eo.kill();
+                }, enemies.main);
+                enemies.main.type2EnemyObjs.forEachAlive(function(eo) {
+                    eo.kill();
+                }, enemies.main);
+                enemies.main.type3EnemyObjs.forEachAlive(function(eo) {
+                    eo.kill();
+                }, enemies.main);
+                break;
+            case this.GAME_STATE.LEVEL_COMPLETE:
+                this.buttonsToDrawArray.push(3);
+                this.buttonsToDrawArray.push(2);
+                break;
+            default:
+                console.log("Not in a proper game state");
+                break;
+        }        
         
         //draw the buttons onto the screen based on the buttons loaded in on the game state change
         for (var i = 0; i < this.buttonsToDrawArray.length; i++){
             switch (this.buttonsToDrawArray[i]){
                 case 0: //this.UI_BUTTON_TYPE.PLAY_BUTTON:
-                    console.log("Created Play Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'playButton', function(){this.buttonPressed('playButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 1: //this.UI_BUTTON_TYPE.UNPAUSE_BUTTON:
-                    console.log("Created Unpause Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'unpauseButton', function(){this.buttonPressed('unpauseButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 2: //this.UI_BUTTON_TYPE.MAIN_MENU_BUTTON:
-                    console.log("Created Main Menu Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'mainMenuButton', function(){this.buttonPressed('mainMenuButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
                 case 3: //this.UI_BUTTON_TYPE.NEXT_LEVEL_BUTTON:
-                    console.log("Created Next Level Button");
                     var button = game.add.button(game.world.centerX - 48, game.world.centerY - (this.buttonsToDrawArray.length/2 * 40) + (i * 40), 'nextLevelButton', function(){this.buttonPressed('nextLevelButton')}, this, 2,1,0);
                     this.buttonsToDestroyArray.push(button);
                     break;
@@ -194,7 +230,6 @@ UI.main = {
     buttonPressed: function(buttonKey) {
         switch (buttonKey){
             case "playButton":
-                console.log("Pressed Play Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
@@ -221,11 +256,13 @@ UI.main = {
                 enemies.main.create();
                 break;
             case "pauseButton":
-                console.log("Pressed Pause Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.PAUSE;
                 //disable physics
                 player.main.bullets.setAll("body.enable", false);
+                enemies.main.type1EnemyObjs.setAll("body.enable", false);
+                enemies.main.type2EnemyObjs.setAll("body.enable", false);
+                enemies.main.type3EnemyObjs.setAll("body.enable", false);
                 //destroy all the buttons
                 for (var i = 0; i < this.buttonsToDestroyArray.length; i++){
                     this.buttonsToDestroyArray[i].kill();
@@ -236,9 +273,11 @@ UI.main = {
                 this.create();
                 break;
             case "unpauseButton":
-                console.log("Pressed Unpause Button");
                 //re enable physics
                 player.main.bullets.setAll("body.enable", true);
+                enemies.main.type1EnemyObjs.setAll("body.enable", true);
+                enemies.main.type2EnemyObjs.setAll("body.enable", true);
+                enemies.main.type3EnemyObjs.setAll("body.enable", true);
                 //update the gamestate
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
@@ -251,7 +290,6 @@ UI.main = {
                 this.create();
                 break;
             case "mainMenuButton":
-                console.log("Pressed Main Menu Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.MAIN_MENU;
                 
@@ -262,11 +300,16 @@ UI.main = {
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
                 
-                //delete the enemies off the screen
-                for(var i = 0; i < enemies.main.enemyObjs.length; i++){
-                    enemies.main.enemyObjs[i].sprite.kill();
-                }
-                enemies.main.enemyObjs = [];
+                //destroy all the enemies
+                enemies.main.type1EnemyObjs.forEachAlive(function(eo) {
+                    eo.kill();
+                }, enemies.main);
+                enemies.main.type2EnemyObjs.forEachAlive(function(eo) {
+                    eo.kill();
+                }, enemies.main);
+                enemies.main.type3EnemyObjs.forEachAlive(function(eo) {
+                    eo.kill();
+                }, enemies.main);
                 
                 //delete the bullets
                 player.main.bullets.destroy();
@@ -279,7 +322,6 @@ UI.main = {
                 this.create();
                 break;
             case "nextLevelButton":
-                console.log("Pressed Next Level Button");
                 //update the gamestate
                 this.gameState = this.GAME_STATE.IN_LEVEL;
                 //destroy all the buttons
