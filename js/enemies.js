@@ -13,6 +13,8 @@ enemies.main = {
     type1EnemyObjs: undefined,
     type2EnemyObjs: undefined,
     type3EnemyObjs: undefined,
+    // group for explosion animation
+    explosions: undefined,
     
     // enemy type "enum"
     enemyType: Object.freeze({
@@ -21,13 +23,14 @@ enemies.main = {
         TYPE3: 2,
         BOSS : 16
     }),
-    alreadyCreated: false,
+    alreadyCreated: false, // Check to make sure we only truly create everything once
         
     preload : function () {
         game.load.image('enemy1', 'assets/Enemies/ship (1).png');
         game.load.image('enemy2', 'assets/Enemies/ship (2).png');
         game.load.image('enemy3', 'assets/Enemies/ship (3).png');
         game.load.image('boss', 'assets/Enemies/ship (16).png');
+        game.load.spritesheet('kaboom', 'assets/Enemies/explode.png', 128, 128);
     },
     
     create : function () {
@@ -46,6 +49,10 @@ enemies.main = {
             this.type3EnemyObjs = game.add.group();
             this.type3EnemyObjs.enableBody = true;
             this.type3EnemyObjs.physicsBodyType = Phaser.Physics.ARCADE;
+            
+            this.explosions = game.add.group();
+            this.explosions.createMultiple(30, 'kaboom');
+            this.explosions.forEach(this.setupExplosion, this);
         }
         
         for (var i = 0; i <= this.level; i++) {
@@ -62,6 +69,11 @@ enemies.main = {
                     break;
             }
         }
+    },
+    
+    setupExplosion : function (explosion) {
+        explosion.anchor.set(0.5, 0.5);
+        explosion.animations.add('kaboom');
     },
     
     update : function () {

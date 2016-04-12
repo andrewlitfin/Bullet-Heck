@@ -8,7 +8,7 @@ var enemies = enemies || {};
 var UI = UI || {};
 
 bulletHeck.main = { 
-    background: undefined,    
+    background: undefined,
     
     //preload function for calling via phaser
     preload : function() {
@@ -73,13 +73,9 @@ bulletHeck.main = {
             }
             
             //If there are no more enemies, move to level complete state
-            var countEnemiesAlive = enemies.main.type1EnemyObjs.countLiving() + enemies.main.type2EnemyObjs.countLiving() + enemies
-            .main.type3EnemyObjs.countLiving();
-/*
-            enemies.main.type1EnemyObjs.forEachAlive(function(eo) {countEnemiesAlive++;}, enemies.main);
-            enemies.main.type2EnemyObjs.forEachAlive(function(eo) {countEnemiesAlive++;}, enemies.main);
-            enemies.main.type3EnemyObjs.forEachAlive(function(eo) {countEnemiesAlive++;}, enemies.main);
-*/
+            var countEnemiesAlive = enemies.main.type1EnemyObjs.countLiving() +
+                enemies.main.type2EnemyObjs.countLiving() + 
+                enemies.main.type3EnemyObjs.countLiving();
             
             if(countEnemiesAlive <= 0){
                 UI.main.gameState = UI.main.GAME_STATE.LEVEL_COMPLETE;
@@ -94,11 +90,31 @@ bulletHeck.main = {
     bulletToEnemyCollision: function(bullet, enemyObj){
         bullet.kill();
         enemyObj.health--;
+        
+        // As the enemy takes damage they slowly turn red
+        var tintOffset = Math.floor((25 - enemyObj.health)/25 * 0xff);
+        enemyObj.tint = 0xffffff - (tintOffset << 8) - tintOffset;
+        
+        if (enemyObj.health <= 0) {
+            var explosion = enemies.main.explosions.getFirstExists(false);
+            explosion.reset(enemyObj.body.x, enemyObj.body.y);
+            explosion.play('kaboom', 30, false, true);
+        }
     },
     
     //Handle Collisions between player and enemies
     playerToEnemyCollision: function(playerObj, enemyObj){
+        var explosion = enemies.main.explosions.getFirstExists(false);
+        explosion.reset(enemyObj.body.x, enemyObj.body.y);
+        explosion.play('kaboom', 30, false, true);
+        
         player.main.health--;
         enemyObj.health = 0;
+        
+        if (player.main.health <= 0) {
+            var explosion = enemies.main.explosions.getFirstExists(false);
+            explosion.reset(playerObj.body.x, playerObj.body.y);
+            explosion.play('kaboom', 30, false, true);
+        }
     },
 };
