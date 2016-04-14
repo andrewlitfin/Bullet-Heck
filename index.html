@@ -8,22 +8,38 @@
     <script type="text/javascript" src="js/enemies.js"></script>
     <script type="text/javascript" src="js/player.js"></script>
     <script type="text/javascript" src="js/UI.js"></script>
-    <script type="text/javascript" src="js/loader.js"></script>    
+    <script type="text/javascript" src="js/loader.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Orbitron:400,500,900' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="assets/favicon.ico"/>
     <style type="text/css">
         body {
             margin: 0;
+            background-image: url("assets/background.gif");
+            background-repeat: repeat-x;
+            background-repeat: repeat-y;
+            background-size: cover;
         }
         canvas {
             margin: 0 auto;
         }
         h1{
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
             text-align: center;
             margin: 0 auto;
+        }
+        fieldset
+        {
+            margin: 0 auto;
+            background-image:url(assets/border.jpg);
+            z-index:1;
+            -moz-border-radius:8px;
+            border-radius:8px;
         }
     </style>
     <script type="text/javascript">
         //create a game object using Phaser
-        var game = new Phaser.Game(600, 700, Phaser.AUTO, 'bulletHeckCanvas', { preload: preload, create: create, update: update });
+        var game = new Phaser.Game(600, 800, Phaser.AUTO, 'bulletHeckCanvas', { preload: preload, create: create, update: update });
 
         //Phaser's core preload function
         function preload() {
@@ -43,6 +59,8 @@
 </head>
 <body>
     <h1>Bullet Heck!</h1>
-    <div id="bulletHeckCanvas"></div>
+    <fieldset  style="width:500px">
+        <div id="bulletHeckCanvas"></div>
+    </fieldset>
 </body>
 </html>

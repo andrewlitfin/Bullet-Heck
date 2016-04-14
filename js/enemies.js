@@ -119,7 +119,7 @@ enemies.main = {
             //if the enemy is out of health
             if (this.health <= 0){
                 this.kill();
-                UI.main.score++;
+                UI.main.score+=100;
                 return false;
             }
             

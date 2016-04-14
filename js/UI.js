@@ -55,8 +55,8 @@ UI.main = {
         //audio
         this.gameplayLoop = game.load.audio('gameplayLoop', 'assets/audio/gameplay_loop.mp3');
         this.menuLoop = game.load.audio('menuLoop', 'assets/audio/menu_loop.mp3');
-        this.gameplayMusic = new Phaser.Sound(game, 'gameplayLoop', 0.01, true);
-        this.menuMusic = new Phaser.Sound(game, 'menuLoop', 0.01, true);
+        this.gameplayMusic = new Phaser.Sound(game, 'gameplayLoop', 0.04, true);
+        this.menuMusic = new Phaser.Sound(game, 'menuLoop', 0.02, true);
     },
     
     create: function(){
@@ -77,8 +77,8 @@ UI.main = {
                 this.buttonsToDrawArray.push(0);
                 
                 //Add instructions text
-                var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle", align: "center" };
-                this.instructionsText = game.add.text(game.width/2, 80, "Arrow Keys to Move\nSpace Bar to Fire\nPress Play to Begin", style);
+                var style = { font: "bold 32px Orbitron", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle", align: "center" };
+                this.instructionsText = game.add.text(game.width/2, 80, "Arrow Keys to Move\nSpace Bar to Fire\nP or ESC to Pause\nClick Play or Hit Enter to Begin", style);
                 this.instructionsText.x -= this.instructionsText.width/2;
                 
                 break;
@@ -166,7 +166,7 @@ UI.main = {
     
     update: function(){
         //print the game score to the top right
-        var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+        var style = { font: "bold 32px Orbitron", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
         
         if(this.scoreText != null) this.scoreText.kill();
         this.scoreText = game.add.text(game.width - 20, 10, "Score: " + this.score, style);
@@ -177,7 +177,7 @@ UI.main = {
             this.gameState == this.GAME_STATE.PAUSE ||
             this.gameState == this.GAME_STATE.GAME_OVER){
             switch (player.main.health){
-                case 3:
+                case 3: //if the player has three life, fill three hearts
                     if(this.heart1) this.heart1.kill();
                     if(this.heart2) this.heart2.kill();
                     if(this.heart3) this.heart3.kill();
@@ -188,7 +188,7 @@ UI.main = {
                     this.heart2.scale.set(2.5,2.5);
                     this.heart3.scale.set(2.5,2.5);
                     break;
-                case 2:
+                case 2: //if the player has two life, fill two hearts and empty one
                     if(this.heart1) this.heart1.kill();
                     if(this.heart2) this.heart2.kill();
                     if(this.heart3) this.heart3.kill();
@@ -199,7 +199,7 @@ UI.main = {
                     this.heart2.scale.set(2.5,2.5);
                     this.heart3.scale.set(2.5,2.5);
                     break;
-                case 1:
+                case 1: //if the player has one life, fill one heart and empty two
                     if(this.heart1) this.heart1.kill();
                     if(this.heart2) this.heart2.kill();
                     if(this.heart3) this.heart3.kill();
@@ -210,7 +210,7 @@ UI.main = {
                     this.heart2.scale.set(2.5,2.5);
                     this.heart3.scale.set(2.5,2.5);
                     break;
-                default:
+                default: //otherwise draw three empty hearts
                     if(this.heart1) this.heart1.kill();
                     if(this.heart2) this.heart2.kill();
                     if(this.heart3) this.heart3.kill();
@@ -222,6 +222,13 @@ UI.main = {
                     this.heart3.scale.set(2.5,2.5);
                     break;
             }
+        }
+        //dont draw the hearts and score on screens where they shouldn't be present
+        else{
+            if(this.heart1)this.heart1.kill();
+            if(this.heart2)this.heart2.kill();
+            if(this.heart3)this.heart3.kill();
+            if(this.scoreText) this.scoreText.kill();
         }
                 
     },
@@ -319,6 +326,8 @@ UI.main = {
                 player.main.playerObj2.kill();
                 
                 //rebuild the UI for the current gamestate
+                player.main.health = 3;
+                this.score = 0;
                 this.create();
                 break;
             case "nextLevelButton":
