@@ -9,11 +9,16 @@ var UI = UI || {};
 
 bulletHeck.main = { 
     background: undefined,
+    // sound effect audio
+    sfx: undefined,
     
     //preload function for calling via phaser
     preload : function() {
         //background
         game.load.image('space', 'assets/background.jpg');
+        
+        // sfx audio (loaded here because collisions are triggers)
+        game.load.audio('sfx', 'assets/audio/fx_mixdown.mp3');
         
         //preload UI
         UI.main.preload();
@@ -29,6 +34,21 @@ bulletHeck.main = {
     create : function() {
         this.background = game.add.tileSprite(0, 0, game.width, game.height, 'space');
         game.physics.startSystem(Phaser.Physics.ARCADE);
+        
+        // Set up the audio sprite
+        this.sfx = game.add.audio('sfx');
+        this.sfx.allowMultiple = true;
+        this.sfx.volume = 0.1;
+        // define audio markers
+        this.sfx.addMarker('alien death', 1, 1.0, 0.02, false);
+        this.sfx.addMarker('boss hit', 3, 0.5,    0.02, false);
+        this.sfx.addMarker('escape', 4, 3.2,      0.02, false);
+        this.sfx.addMarker('meow', 8, 0.5,        0.02, false);
+        this.sfx.addMarker('numkey', 9, 0.1,      0.02, false);
+        this.sfx.addMarker('ping', 10, 1.0,       0.02, false);
+        this.sfx.addMarker('death', 12, 4.2,      0.02, false);
+        this.sfx.addMarker('shot', 17, 1.0,       0.02, false);
+        this.sfx.addMarker('squit', 19, 0.3,      0.02, false);
         
         //create UI
         UI.main.create();
@@ -90,6 +110,8 @@ bulletHeck.main = {
     bulletToEnemyCollision: function(bullet, enemyObj){
         bullet.kill();
         enemyObj.health--;
+        console.log(bulletHeck.main.sfx);
+        bulletHeck.main.sfx.play('numkey');
         
         // As the enemy takes damage they slowly turn red
         var tintOffset = Math.floor((25 - enemyObj.health)/25 * 0xff);
@@ -99,6 +121,8 @@ bulletHeck.main = {
             var explosion = enemies.main.explosions.getFirstExists(false);
             explosion.reset(enemyObj.body.x, enemyObj.body.y);
             explosion.play('kaboom', 30, false, true);
+            
+            bulletHeck.main.sfx.play('alien death');
         }
     },
     
@@ -108,6 +132,8 @@ bulletHeck.main = {
         explosion.reset(enemyObj.body.x, enemyObj.body.y);
         explosion.play('kaboom', 30, false, true);
         
+        bulletHeck.main.sfx.play('alien death');
+        
         player.main.health--;
         enemyObj.health = 0;
         
@@ -115,6 +141,8 @@ bulletHeck.main = {
             var explosion = enemies.main.explosions.getFirstExists(false);
             explosion.reset(playerObj.body.x, playerObj.body.y);
             explosion.play('kaboom', 30, false, true);
+            
+            bulletHeck.main.sfx.play('death');
         }
     },
 };
