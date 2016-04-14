@@ -110,7 +110,6 @@ bulletHeck.main = {
     bulletToEnemyCollision: function(bullet, enemyObj){
         bullet.kill();
         enemyObj.health--;
-        console.log(bulletHeck.main.sfx);
         bulletHeck.main.sfx.play('numkey');
         
         // As the enemy takes damage they slowly turn red
@@ -133,6 +132,7 @@ bulletHeck.main = {
         explosion.play('kaboom', 30, false, true);
         
         bulletHeck.main.sfx.play('alien death');
+        bulletHeck.main.sfx.play('boss hit');
         
         player.main.health--;
         enemyObj.health = 0;
