@@ -1,5 +1,0 @@
-Todo:
-
-low priority:
--refactor to use damage(amt) rather than manipulate health directly (n.b. damage auto calls kill() if health <= 0)
--refactor all files to use 'alreadyCreated'
