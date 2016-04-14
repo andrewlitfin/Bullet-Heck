@@ -1,8 +1,4 @@
 Todo:
-aural feedback
--bullet hits enemy
--player hits enemy
--enemy destroyed
 
 low priority:
 -refactor to use damage(amt) rather than manipulate health directly (n.b. damage auto calls kill() if health <= 0)
