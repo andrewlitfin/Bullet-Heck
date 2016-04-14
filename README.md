@@ -6,6 +6,7 @@ Credit to:
 
 //art
 http://opengameart.org/content/technozomians-owl-spaceship
+http://opengameart.org/content/alien-spaceship-sprite-pack
 http://opengameart.org/content/sci-fi-space-simple-bullets
 http://opengameart.org/content/several-heart-styles
 https://www.flickr.com/photos/webtreatsetc/4323914169
