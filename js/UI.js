@@ -12,6 +12,7 @@ UI.main = {
     score: 0,
     scoreText: null,
     instructionsText: null,
+    creditsText: null,
     
     //Three hearts for player health
     heart1: undefined,
@@ -80,6 +81,8 @@ UI.main = {
                 var style = { font: "bold 32px Orbitron", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle", align: "center" };
                 this.instructionsText = game.add.text(game.width/2, 80, "Arrow Keys to Move\nSpace Bar to Fire\nP or ESC to Pause\nClick Play or Hit Enter to Begin", style);
                 this.instructionsText.x -= this.instructionsText.width/2;
+                this.creditsText= game.add.text(game.width/2, 600, "Designed and Developed by:\nMatthew Fasman\nAndrew Litfin", style);
+                this.creditsText.x -= this.creditsText.width/2;
                 
                 break;
             case this.GAME_STATE.IN_LEVEL: //establish IN_LEVEL UI
@@ -246,9 +249,9 @@ UI.main = {
                 this.buttonsToDestroyArray = [];
                 this.buttonsToDrawArray = [];
                 this.instructionsText.kill();
+                this.creditsText.kill();
                 //reset the score
                 this.score = 0;
-                this.instructionsText.kill();
                 //rebuild the UI for the current gamestate
                 this.create();
 
